@@ -1,0 +1,23 @@
+- id: 5619ac19-8fea-4de2-9ce3-88c97a54bfea
+  email: "email1@test.com"
+  password: "123"
+  created_at: RAW=NOW()
+  updated_at: RAW=NOW()
+
+- id: 1219ac19-8fea-4de2-9ce3-88c97a54bfeb
+  email: "email2@test.com"
+  password: "123"
+  created_at: RAW=NOW()
+  updated_at: RAW=NOW()
+
+- id: 5619ac19-8fea-4de2-9ce3-88c97a54bfec
+  email: "email3@test.com"
+  password: "123"
+  created_at: RAW=NOW()
+  updated_at: RAW=NOW()
+
+- id: 1219ac19-8fea-4de2-9ce3-88c97a54bfed
+  email: "email4@test.com"
+  password: "123"
+  created_at: RAW=NOW()
+  updated_at: RAW=NOW()

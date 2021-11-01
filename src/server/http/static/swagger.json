@@ -1,0 +1,250 @@
+{
+  "consumes": [
+    "application/json"
+  ],
+  "produces": [
+    "application/json"
+  ],
+  "schemes": [
+    "https",
+    "http"
+  ],
+  "swagger": "2.0",
+  "info": {
+    "description": "API for UI",
+    "title": "API Challenge.",
+    "version": "0.0.1"
+  },
+  "basePath": "/api/v1",
+  "paths": {
+    "/login": {
+      "post": {
+        "description": "create a session and obtain tokens pair",
+        "tags": [
+          "auth"
+        ],
+        "operationId": "login",
+        "parameters": [
+          {
+            "name": "login_request",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/LoginRequest"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Fetched",
+            "schema": {
+              "$ref": "#/definitions/LoginResponse"
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "schema": {
+              "$ref": "#/definitions/ValidationErr"
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "schema": {
+              "$ref": "#/definitions/CommonError"
+            }
+          }
+        }
+      }
+    },
+    "/logout": {
+      "delete": {
+        "description": "deactivate user session, move access token to the black list",
+        "tags": [
+          "auth"
+        ],
+        "operationId": "logout",
+        "responses": {
+          "204": {
+            "description": "Successfully logged out"
+          },
+          "400": {
+            "description": "Bad Request",
+            "schema": {
+              "$ref": "#/definitions/ValidationErr"
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "schema": {
+              "$ref": "#/definitions/CommonError"
+            }
+          }
+        }
+      }
+    },
+    "/sign-up": {
+      "post": {
+        "description": "registed new user",
+        "tags": [
+          "auth"
+        ],
+        "operationId": "sign_up",
+        "parameters": [
+          {
+            "name": "sign_up_request",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/SignUpRequest"
+            }
+          }
+        ],
+        "responses": {
+          "400": {
+            "description": "Bad Request",
+            "schema": {
+              "$ref": "#/definitions/ValidationErr"
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "schema": {
+              "$ref": "#/definitions/CommonError"
+            }
+          }
+        }
+      }
+    },
+    "/token": {
+      "post": {
+        "description": "refresh access token if previous tokens pair was valid",
+        "tags": [
+          "auth"
+        ],
+        "operationId": "token",
+        "parameters": [
+          {
+            "name": "TokenPair",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/TokenPair"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Created",
+            "schema": {
+              "$ref": "#/definitions/TokenPair"
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "schema": {
+              "$ref": "#/definitions/ValidationErr"
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "schema": {
+              "$ref": "#/definitions/CommonError"
+            }
+          }
+        }
+      }
+    }
+  },
+  "definitions": {
+    "CommonError": {
+      "type": "object",
+      "properties": {
+        "code": {
+          "type": "string",
+          "x-go-name": "Code"
+        }
+      },
+      "x-go-package": "github.com/erp/api/src/docs"
+    },
+    "LoginRequest": {
+      "type": "object",
+      "properties": {
+        "email": {
+          "type": "string",
+          "x-go-name": "Email"
+        },
+        "password": {
+          "type": "string",
+          "x-go-name": "Password"
+        }
+      },
+      "x-go-package": "github.com/erp/api/src/models"
+    },
+    "LoginResponse": {
+      "type": "object",
+      "properties": {
+        "access_token": {
+          "type": "string",
+          "x-go-name": "AccessToken"
+        },
+        "refresh_token": {
+          "type": "string",
+          "x-go-name": "RefreshToken"
+        }
+      },
+      "x-go-package": "github.com/erp/api/src/models"
+    },
+    "SignUpRequest": {
+      "type": "object",
+      "properties": {
+        "email": {
+          "type": "string",
+          "x-go-name": "Email"
+        },
+        "password": {
+          "type": "string",
+          "x-go-name": "Password"
+        }
+      },
+      "x-go-package": "github.com/erp/api/src/models"
+    },
+    "TokenPair": {
+      "type": "object",
+      "properties": {
+        "access_token": {
+          "type": "string",
+          "x-go-name": "AccessToken"
+        },
+        "refresh_token": {
+          "type": "string",
+          "x-go-name": "RefreshToken"
+        }
+      },
+      "x-go-package": "github.com/erp/api/src/models"
+    },
+    "ValidationErr": {
+      "type": "object",
+      "properties": {
+        "code": {
+          "type": "string",
+          "x-go-name": "Code"
+        },
+        "validation_errors": {
+          "type": "object",
+          "properties": {
+            "code": {
+              "type": "string",
+              "x-go-name": "Code"
+            },
+            "field": {
+              "type": "string",
+              "x-go-name": "Field"
+            }
+          },
+          "x-go-name": "ValidationErrors"
+        }
+      },
+      "x-go-package": "github.com/erp/api/src/docs"
+    }
+  }
+}

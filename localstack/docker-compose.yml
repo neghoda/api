@@ -1,0 +1,24 @@
+version: "3.3"
+services:
+  postgres:
+    image: postgres:13.3
+    container_name: postgres-api
+    shm_size: '1gb'
+    ports:
+      - 5432:5432
+    volumes:
+      - ./init.sh:/docker-entrypoint-initdb.d/init.sh
+      - ./erp-postgres-data:/var/lib/postgresql/data
+    environment:
+      API_POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: "12345"
+      API_POSTGRES_HOST: postgres
+      API_POSTGRES_PORT: "5432"
+      API_POSTGRES_DB: api-db
+  redis:
+    image: redis
+    container_name: api-redis
+    command: redis-server --requirepass wu1ohr5Eipun8Eim
+    ports:
+      - 6379:6378
+

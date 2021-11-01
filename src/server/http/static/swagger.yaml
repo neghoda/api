@@ -1,0 +1,167 @@
+basePath: /api/v1
+consumes:
+- application/json
+definitions:
+  CommonError:
+    properties:
+      code:
+        type: string
+        x-go-name: Code
+    type: object
+    x-go-package: github.com/erp/api/src/docs
+  LoginRequest:
+    properties:
+      email:
+        type: string
+        x-go-name: Email
+      password:
+        type: string
+        x-go-name: Password
+    type: object
+    x-go-package: github.com/erp/api/src/models
+  LoginResponse:
+    properties:
+      access_token:
+        type: string
+        x-go-name: AccessToken
+      refresh_token:
+        type: string
+        x-go-name: RefreshToken
+    type: object
+    x-go-package: github.com/erp/api/src/models
+  SignUpRequest:
+    properties:
+      email:
+        type: string
+        x-go-name: Email
+      password:
+        type: string
+        x-go-name: Password
+    type: object
+    x-go-package: github.com/erp/api/src/models
+  TokenPair:
+    properties:
+      access_token:
+        type: string
+        x-go-name: AccessToken
+      refresh_token:
+        type: string
+        x-go-name: RefreshToken
+    type: object
+    x-go-package: github.com/erp/api/src/models
+  ValidationErr:
+    properties:
+      code:
+        type: string
+        x-go-name: Code
+      validation_errors:
+        properties:
+          code:
+            type: string
+            x-go-name: Code
+          field:
+            type: string
+            x-go-name: Field
+        type: object
+        x-go-name: ValidationErrors
+    type: object
+    x-go-package: github.com/erp/api/src/docs
+info:
+  description: API for UI
+  title: API Challenge.
+  version: 0.0.1
+paths:
+  /login:
+    post:
+      description: create a session and obtain tokens pair
+      operationId: login
+      parameters:
+      - in: body
+        name: login_request
+        required: true
+        schema:
+          $ref: '#/definitions/LoginRequest'
+      responses:
+        "200":
+          description: Fetched
+          schema:
+            $ref: '#/definitions/LoginResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/ValidationErr'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/CommonError'
+      tags:
+      - auth
+  /logout:
+    delete:
+      description: deactivate user session, move access token to the black list
+      operationId: logout
+      responses:
+        "204":
+          description: Successfully logged out
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/ValidationErr'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/CommonError'
+      tags:
+      - auth
+  /sign-up:
+    post:
+      description: registed new user
+      operationId: sign_up
+      parameters:
+      - in: body
+        name: sign_up_request
+        required: true
+        schema:
+          $ref: '#/definitions/SignUpRequest'
+      responses:
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/ValidationErr'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/CommonError'
+      tags:
+      - auth
+  /token:
+    post:
+      description: refresh access token if previous tokens pair was valid
+      operationId: token
+      parameters:
+      - in: body
+        name: TokenPair
+        required: true
+        schema:
+          $ref: '#/definitions/TokenPair'
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/TokenPair'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/ValidationErr'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/CommonError'
+      tags:
+      - auth
+produces:
+- application/json
+schemes:
+- https
+- http
+swagger: "2.0"
