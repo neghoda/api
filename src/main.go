@@ -2,6 +2,7 @@ package main
 
 import (
 	"context"
+	"fmt"
 	"os"
 	"os/signal"
 	"strings"
@@ -35,11 +36,10 @@ func main() {
 	ctx, cancel := context.WithCancel(context.Background())
 	setupGracefulShutdown(cancel)
 
-	var wg = &sync.WaitGroup{}
-
-	db, err := postgres.New(ctx, wg, &cfg.PostgresCfg, &cfg.PostgresReplicaCfg)
+	persistenceDB := postgres.New()
+	err = persistenceDB.NewConn(&cfg.PostgresCfg)
 	if err != nil {
-		log.WithError(err).Fatal("postgres connection error")
+		log.Fatal(fmt.Sprintf("cannot connect to the Postgres server %v", err))
 	}
 
 	redisClient, err := redis.New(&cfg.RedisCfg)
@@ -47,11 +47,13 @@ func main() {
 		log.WithError(err).Fatal("redis connection error")
 	}
 
+	var wg = &sync.WaitGroup{}
+
 	srv := service.New(
 		&cfg,
 		redisClient,
-		db.NewAuthRepo(),
-		db.NewProfileRepo(),
+		persistenceDB,
+		persistenceDB,
 	)
 
 	httpSrv, err := http.New(
