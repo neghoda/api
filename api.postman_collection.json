@@ -1,0 +1,178 @@
+{
+	"info": {
+		"_postman_id": "a2b4476a-a868-4d5a-9329-10c386bc63dd",
+		"name": "api ",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "sign-up",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"email\": \"test@test.com\",\n    \"password\": \"Qwerty123\"\n}"
+				},
+				"url": {
+					"raw": "{{base_url}}/api/v1/signup",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"api",
+						"v1",
+						"signup"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "login",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"email\": \"test@test.com\",\n    \"password\": \"Qwerty123\"\n}"
+				},
+				"url": {
+					"raw": "{{base_url}}/api/v1/login",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"api",
+						"v1",
+						"login"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "logout",
+			"request": {
+				"method": "DELETE",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJTZXNzaW9uSUQiOiI2ODBlOTZjMi1hNGUwLTQ2MzEtYWQyZi00OWRmNzYzOTlhZTUiLCJUb2tlbklEIjoiNDQ0ZDIzMDEtYTE5Ni00ZTk5LWE4NmMtNDY2ZmU5MDI1OGM0IiwiVXNlcklEIjoiNzMzNTEyZTctMDBmMy00NDg2LWE5YzktZjRlMjk3YjY1ZmMxIiwiZXhwIjoxNjM1ODQ5NTEwfQ.JbUtQbbOkF4HY4aqw73qU7cKyhgAyEOvL1dJ6gE9PsA",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "{{base_url}}/api/v1/logout",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"api",
+						"v1",
+						"logout"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "refresh token",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": " {\n        \"access_token\": \"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJTZXNzaW9uSUQiOiIwNDA1Mjg4Zi04M2RiLTQzYjQtOWViMC1kMWZkN2JlYmMxYzUiLCJUb2tlbklEIjoiNGM1MTc4MzYtNTdjOS00NGFhLWI0OWYtOGRkMDAzYzhlNzQyIiwiVXNlcklEIjoiNzMzNTEyZTctMDBmMy00NDg2LWE5YzktZjRlMjk3YjY1ZmMxIiwiZXhwIjoxNjM1NzY1ODIwfQ.O9uVDoEDKaCSScTjswf8q3ZkW9-1bOiJDSmU-Ji3sDU\",\n        \"refresh_token\": \"BOd8R3W_HMd6BgI5U-hPMKClqqxaIanowuEQ7yNL-LQ=\"\n    }\n"
+				},
+				"url": {
+					"raw": "{{base_url}}/api/v1/token",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"api",
+						"v1",
+						"token"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "health",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{base_url}}/api/v1/health",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"api",
+						"v1",
+						"health"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "tickers",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJTZXNzaW9uSUQiOiIwNTZkZDk5Mi02YWVmLTQ2ZjUtYWFmNi04Y2RjMmZlNGFjY2MiLCJUb2tlbklEIjoiNWVhZWNjNTYtNzg2Mi00OTZmLThkN2QtZmI0ZDgwNmVhODVkIiwiVXNlcklEIjoiNzMzNTEyZTctMDBmMy00NDg2LWE5YzktZjRlMjk3YjY1ZmMxIiwiZXhwIjoxNjM1ODY4NTY3fQ.BGO_3ZsiquKA4IbS3jouSw78LDyhZTjwE2DHiv7cjGk",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "{{base_url}}/api/v1/tickers",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"api",
+						"v1",
+						"tickers"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "funds",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJTZXNzaW9uSUQiOiIwNTZkZDk5Mi02YWVmLTQ2ZjUtYWFmNi04Y2RjMmZlNGFjY2MiLCJUb2tlbklEIjoiNWVhZWNjNTYtNzg2Mi00OTZmLThkN2QtZmI0ZDgwNmVhODVkIiwiVXNlcklEIjoiNzMzNTEyZTctMDBmMy00NDg2LWE5YzktZjRlMjk3YjY1ZmMxIiwiZXhwIjoxNjM1ODY4NTY3fQ.BGO_3ZsiquKA4IbS3jouSw78LDyhZTjwE2DHiv7cjGk",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "{{base_url}}/api/v1/funds?ticker=ONEO",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"api",
+						"v1",
+						"funds"
+					],
+					"query": [
+						{
+							"key": "ticker",
+							"value": "ONEO"
+						}
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
