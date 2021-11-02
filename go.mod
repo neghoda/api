@@ -5,7 +5,6 @@ go 1.16
 require (
 	github.com/go-pg/pg v8.0.7+incompatible
 	github.com/go-pg/pg/v9 v9.2.0 // indirect
-	github.com/go-redis/redis v6.15.9+incompatible
 	github.com/golang-jwt/jwt v3.2.2+incompatible
 	github.com/golang/protobuf v1.5.2 // indirect
 	github.com/google/go-cmp v0.5.6 // indirect

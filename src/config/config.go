@@ -9,7 +9,6 @@ type Config struct {
 	HTTPConfig        HTTP     `mapstructure:"HTTP_SERVER"`
 	PostgresCfg       Postgres `mapstructure:"POSTGRES_MASTER"`
 	PostgresTestCfg   Postgres `mapstructure:"POSTGRES_TEST"`
-	RedisCfg          Redis    `mapstructure:"REDIS"`
 	RefreshTokenLen   int      `mapstructure:"REFRESH_TOKEN_LEN" default:"32"`
 	AccessTokenTTL    int      `mapstructure:"ACCESS_TOKEN_TTL_SEC" default:"900"` // seconds
 	AccessTokenSecret string   `mapstructure:"ACCESS_TOKEN_SECRET" default:""`
@@ -36,11 +35,4 @@ type Postgres struct {
 	ReadTimeout  time.Duration `mapstructure:"READ_TIMEOUT"  default:"10s"`
 	WriteTimeout time.Duration `mapstructure:"WRITE_TIMEOUT" default:"10s"`
 	EnableLogger bool          `mapstructure:"ENABLE_LOGGER" default:"true"`
-}
-
-// Redis defines configs for Redis.
-type Redis struct {
-	Address  string `mapstructure:"ADDRESS"  default:"localhost:6379"`
-	PoolSize int    `mapstructure:"POOL_SIZE"  default:"10"`
-	Password string `mapstructure:"PASSWORD"  default:""`
 }
