@@ -17,6 +17,43 @@
   },
   "basePath": "/api/v1",
   "paths": {
+    "/funds": {
+      "get": {
+        "description": "list of all avalible tickers",
+        "tags": [
+          "funds"
+        ],
+        "operationId": "get_fund_data",
+        "parameters": [
+          {
+            "type": "string",
+            "name": "ticker",
+            "in": "query",
+            "required": true
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Created",
+            "schema": {
+              "$ref": "#/definitions/TokenPair"
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "schema": {
+              "$ref": "#/definitions/ValidationErr"
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "schema": {
+              "$ref": "#/definitions/CommonError"
+            }
+          }
+        }
+      }
+    },
     "/login": {
       "post": {
         "description": "create a session and obtain tokens pair",
@@ -100,6 +137,35 @@
           }
         ],
         "responses": {
+          "400": {
+            "description": "Bad Request",
+            "schema": {
+              "$ref": "#/definitions/ValidationErr"
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "schema": {
+              "$ref": "#/definitions/CommonError"
+            }
+          }
+        }
+      }
+    },
+    "/ticker": {
+      "get": {
+        "description": "list of all avalible tickers",
+        "tags": [
+          "funds"
+        ],
+        "operationId": "get_ticker_list",
+        "responses": {
+          "201": {
+            "description": "Created",
+            "schema": {
+              "$ref": "#/definitions/TokenPair"
+            }
+          },
           "400": {
             "description": "Bad Request",
             "schema": {

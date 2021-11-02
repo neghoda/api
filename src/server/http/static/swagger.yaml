@@ -71,6 +71,30 @@ info:
   title: API Challenge.
   version: 0.0.1
 paths:
+  /funds:
+    get:
+      description: list of all avalible tickers
+      operationId: get_fund_data
+      parameters:
+      - in: query
+        name: ticker
+        required: true
+        type: string
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/TokenPair'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/ValidationErr'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/CommonError'
+      tags:
+      - funds
   /login:
     post:
       description: create a session and obtain tokens pair
@@ -134,6 +158,25 @@ paths:
             $ref: '#/definitions/CommonError'
       tags:
       - auth
+  /ticker:
+    get:
+      description: list of all avalible tickers
+      operationId: get_ticker_list
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/TokenPair'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/ValidationErr'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/CommonError'
+      tags:
+      - funds
   /token:
     post:
       description: refresh access token if previous tokens pair was valid

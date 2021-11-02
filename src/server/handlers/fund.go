@@ -17,6 +17,23 @@ func NewFundHandler(s *service.Service) *FundHandler {
 	}
 }
 
+// swagger:operation GET /ticker funds get_ticker_list
+//   list of all avalible tickers
+// ---
+// parameters:
+// responses:
+//   '201':
+//     description: Created
+//     schema:
+//       "$ref": "#/definitions/TokenPair"
+//   '400':
+//     description: Bad Request
+//     schema:
+//       "$ref": "#/definitions/ValidationErr"
+//   '500':
+//     description: Internal Server Error
+//     schema:
+//       "$ref": "#/definitions/CommonError"
 func (h *FundHandler) GetTickerList(w http.ResponseWriter, r *http.Request) {
 	res, err := h.service.TickerList()
 	if err != nil {
@@ -30,6 +47,27 @@ func (h *FundHandler) GetTickerList(w http.ResponseWriter, r *http.Request) {
 	})
 }
 
+// swagger:operation GET /funds funds get_fund_data
+//   list of all avalible tickers
+// ---
+// parameters:
+// - name: ticker
+//   in: query
+//   required: true
+//   type: string
+// responses:
+//   '201':
+//     description: Created
+//     schema:
+//       "$ref": "#/definitions/TokenPair"
+//   '400':
+//     description: Bad Request
+//     schema:
+//       "$ref": "#/definitions/ValidationErr"
+//   '500':
+//     description: Internal Server Error
+//     schema:
+//       "$ref": "#/definitions/CommonError"
 func (h *FundHandler) GetFundByTicker(w http.ResponseWriter, r *http.Request) {
 	ticker := r.URL.Query().Get("ticker")
 
