@@ -9,6 +9,7 @@ import (
 	"sync"
 	"syscall"
 
+	"github.com/erp/api/src/cron"
 	"github.com/erp/api/src/repo/ssga"
 	"github.com/erp/api/src/server/handlers"
 	"github.com/erp/api/src/service"
@@ -44,15 +45,29 @@ func main() {
 		log.Fatal(fmt.Sprintf("cannot connect to the Postgres server %v", err))
 	}
 
-	var wg = &sync.WaitGroup{}
+	var (
+		wg         = &sync.WaitGroup{}
+		ssgaClient = ssga.NewClient(
+			nethttp.Client{},
+		)
+	)
 
 	srv := service.New(
 		&cfg,
 		persistenceDB,
-		ssga.NewClient(
-			nethttp.Client{},
-		),
+		ssgaClient,
 	)
+
+	crowWrapper := cron.NewCronWrapper(
+		&cfg,
+		persistenceDB,
+		ssgaClient,
+	)
+
+	err = crowWrapper.Setup()
+	if err != nil {
+		log.Fatal(fmt.Sprintf("cannot setup cron jobs: %v", err))
+	}
 
 	httpSrv, err := http.New(
 		&cfg.HTTPConfig,
