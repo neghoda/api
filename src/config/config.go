@@ -13,6 +13,7 @@ type Config struct {
 	AccessTokenTTL    int      `mapstructure:"ACCESS_TOKEN_TTL_SEC" default:"900"` // seconds
 	AccessTokenSecret string   `mapstructure:"ACCESS_TOKEN_SECRET" default:""`
 	UserSessionTTL    int      `mapstructure:"USER_SESSION_TTL_SEC" default:"86400"` // seconds
+	CronConfig        string   `mapstructure:"CRON_CONFIG" default:"05 18 * * *"`
 }
 
 type HTTP struct {

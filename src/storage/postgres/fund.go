@@ -44,6 +44,8 @@ func (q DBQuery) FetchFund(ticker string) (models.Fund, error) {
 
 	err = q.Model(&fund.Holdings).
 		Where("fund_ticker = ?", ticker).
+		OrderExpr("length(weight) DESC").
+		Order("weight DESC").
 		Select()
 	if err != nil {
 		return fund, toServiceError(err)
@@ -51,6 +53,8 @@ func (q DBQuery) FetchFund(ticker string) (models.Fund, error) {
 
 	err = q.Model(&fund.Sectors).
 		Where("fund_ticker = ?", ticker).
+		OrderExpr("length(weight) DESC").
+		Order("weight DESC").
 		Select()
 	if err != nil {
 		return fund, toServiceError(err)
@@ -58,6 +62,8 @@ func (q DBQuery) FetchFund(ticker string) (models.Fund, error) {
 
 	err = q.Model(&fund.Countries).
 		Where("fund_ticker = ?", ticker).
+		OrderExpr("length(weight) DESC").
+		Order("weight DESC").
 		Select()
 	if err != nil {
 		return fund, toServiceError(err)
