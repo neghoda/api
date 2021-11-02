@@ -7,16 +7,18 @@ PKG_PATH := $(or $(PKG),'.')
 PKG_LIST := $(shell go list ${PKG_PATH}/... | grep -v /vendor/)
 GOLINT := golangci-lint
 
+POSTGRES_MASTER_HOST := $(or $(POSTGRES_MASTER_HOST), localhost)
 POSTGRES_MASTER_NAME := $(or $(POSTGRES_MASTER_NAME), api-db)
 POSTGRES_MASTER_USER := $(or $(POSTGRES_MASTER_USER), postgres)
 POSTGRES_MASTER_PASSWORD := $(or $(POSTGRES_MASTER_PASSWORD), 12345)
 
+POSTGRES_TEST_HOST := $(or $(POSTGRES_TEST_HOST), localhost)
 POSTGRES_TEST_NAME := $(or $(POSTGRES_TEST_NAME), api-db-test)
 POSTGRES_TEST_USER := $(or $(POSTGRES_TEST_USER), postgres)
 POSTGRES_TEST_PASSWORD := $(or $(POSTGRES_TEST_PASSWORD), 12345)
 
-MIGRATE=migrate -path sql/migrations -database postgres://${POSTGRES_MASTER_USER}:${POSTGRES_MASTER_PASSWORD}@localhost:5432/${POSTGRES_MASTER_NAME}?sslmode=disable
-TEST_MIGRATE=migrate -path sql/migrations -database postgres://${POSTGRES_TEST_USER}:${POSTGRES_TEST_PASSWORD}@localhost:5432/${POSTGRES_TEST_NAME}?sslmode=disable
+MIGRATE=migrate -path sql/migrations -database postgres://${POSTGRES_MASTER_USER}:${POSTGRES_MASTER_PASSWORD}@${POSTGRES_MASTER_HOST}:5432/${POSTGRES_MASTER_NAME}?sslmode=disable
+TEST_MIGRATE=migrate -path sql/migrations -database postgres://${POSTGRES_TEST_USER}:${POSTGRES_TEST_PASSWORD}@${POSTGRES_TEST_HOST}:5432/${POSTGRES_TEST_NAME}?sslmode=disable
 
 check-lint:
 	@which $(GOLINT) || curl -sSfL https://raw.githubusercontent.com/golangci/golangci-lint/master/install.sh | sh -s v1.41.1
