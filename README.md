@@ -9,9 +9,9 @@ Postman collection located at the repo root [api.postman_collection.json]
 - PostgreSQL
 - golang:1.14.4
 
-## How to setup DB for development
+## How to setup API for development
 
-```make dep``` - load dependencies
+```make dep``` - load dependencies\
 ```make dc-up``` - start empty PostgreSQL database  
 ```make dc-show``` - check PostgresSQL status\
 ```migrate-macos-install``` OR ```migrate-linux-install``` - install migrate
