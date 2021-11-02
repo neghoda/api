@@ -4,6 +4,7 @@ import (
 	"sync"
 
 	"github.com/erp/api/src/config"
+	"github.com/erp/api/src/repo/ssga"
 	"github.com/erp/api/src/storage/postgres"
 )
 
@@ -14,20 +15,20 @@ var (
 
 type Service struct {
 	cfg      *config.Config
-	authRepo *postgres.Connector
-	userRepo *postgres.Connector
+	db       *postgres.Connector
+	ssgaRepo *ssga.Client
 }
 
 func New(
 	cfg *config.Config,
-	aur *postgres.Connector,
-	pr *postgres.Connector,
+	db *postgres.Connector,
+	ssgaRepo *ssga.Client,
 ) *Service {
 	once.Do(func() {
 		service = &Service{
 			cfg:      cfg,
-			authRepo: aur,
-			userRepo: pr,
+			db:       db,
+			ssgaRepo: ssgaRepo,
 		}
 	})
 

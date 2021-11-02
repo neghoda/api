@@ -28,7 +28,7 @@ func lookForHolding(n *html.Node, fund *models.Fund) {
 		}
 	}
 
-	if holding.Name != "" && holding.Shares != "" && holding.Weight != "" {
+	if holding.Name != "" && holding.Share != "" && holding.Weight != "" {
 		fund.Holdings = append(fund.Holdings, holding)
 	}
 }
@@ -53,7 +53,7 @@ func lookForHoldingShares(n *html.Node, holding *models.Holding) {
 			strings.EqualFold(label, "Par Value:") ||
 			strings.EqualFold(label, "Market Value:") {
 			if n.FirstChild != nil {
-				holding.Shares = strings.TrimSpace(n.FirstChild.Data)
+				holding.Share = strings.TrimSpace(n.FirstChild.Data)
 			}
 		}
 	}

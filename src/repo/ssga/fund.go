@@ -2,10 +2,11 @@ package ssga
 
 import (
 	"io"
-	"log"
 	"net/http"
 	"net/url"
 	"strings"
+
+	log "github.com/sirupsen/logrus"
 
 	"github.com/erp/api/src/models"
 	"github.com/google/uuid"

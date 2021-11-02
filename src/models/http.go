@@ -22,3 +22,7 @@ type TokenPair struct {
 type LoginResponse struct {
 	TokenPair `json:"tokens_pair"`
 }
+
+type TickersListResponse struct {
+	Tickers []string `json:"tickers"`
+}

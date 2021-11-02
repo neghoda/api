@@ -2,8 +2,9 @@ package ssga
 
 import (
 	"encoding/json"
-	"log"
 	"strings"
+
+	log "github.com/sirupsen/logrus"
 
 	"github.com/erp/api/src/models"
 	"golang.org/x/net/html"
