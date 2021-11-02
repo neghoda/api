@@ -14,7 +14,7 @@ Postman collection located at the repo root [api.postman_collection.json]
 ```make dep``` - load dependencies\
 ```make dc-up``` - start empty PostgreSQL database  
 ```make dc-show``` - check PostgresSQL status\
-```migrate-macos-install``` OR ```migrate-linux-install``` - install migrate
+```migrate-macos-install``` OR ```migrate-linux-install``` - install migrate\
 ```make migrate-up``` - roll-up migrations  
 ```make run``` - start service
 
