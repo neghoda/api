@@ -1,25 +1,29 @@
 package postgres
 
 import (
-	"context"
-	"sync"
-
 	"github.com/erp/api/src/config"
-	"github.com/go-pg/pg/v9"
-	log "github.com/sirupsen/logrus"
-	pgv2 "gitlab.yalantis.com/gophers/pg/v2"
+	"github.com/go-pg/pg"
 )
 
-// Postgres pg connection.
-type Postgres struct {
-	*pgv2.Connector
-	ctx context.Context
+// Connector pg connection
+type Connector struct {
+	conn *pg.DB
 }
 
-func New(ctx context.Context, wg *sync.WaitGroup, mainCfg, replicaCfg *config.Postgres) (*Postgres, error) {
-	connector := pgv2.New()
+// New returns postgres Connector
+func New() *Connector {
+	return &Connector{}
+}
 
-	err := connector.Connect(&pg.Options{
+// NewConn init, overwrite connection
+func (c *Connector) NewConn(mainCfg *config.Postgres) (err error) {
+	c.conn, err = newConn(mainCfg)
+	return
+}
+
+// newConn init connection
+func newConn(mainCfg *config.Postgres) (*pg.DB, error) {
+	conn := pg.Connect(&pg.Options{
 		Addr:         mainCfg.Host + ":" + mainCfg.Port,
 		User:         mainCfg.User,
 		Password:     mainCfg.Password,
@@ -29,60 +33,17 @@ func New(ctx context.Context, wg *sync.WaitGroup, mainCfg, replicaCfg *config.Po
 		ReadTimeout:  mainCfg.ReadTimeout,
 		MaxRetries:   mainCfg.MaxRetries,
 	})
-	if err != nil {
-		log.WithError(err).Error("cannot connect to db")
 
+	var n int
+	_, err := conn.QueryOne(pg.Scan(&n), "SELECT 1")
+	if err != nil {
 		return nil, err
 	}
 
-	if mainCfg.EnableLogger {
-		connector.SetLogger(&LoggerAdapter{log.StandardLogger()})
-	}
-
-	replicaOpt1 := &pg.Options{
-		Addr:         replicaCfg.Host + ":" + replicaCfg.Port,
-		User:         replicaCfg.User,
-		Password:     replicaCfg.Password,
-		Database:     replicaCfg.Name,
-		PoolSize:     replicaCfg.PoolSize,
-		WriteTimeout: replicaCfg.WriteTimeout,
-		ReadTimeout:  replicaCfg.ReadTimeout,
-		MaxRetries:   replicaCfg.MaxRetries,
-	}
-
-	err = connector.ConnectReplicas(replicaOpt1)
-	if err != nil {
-		log.WithError(err).Error("cannot connect to replica")
-
-		return nil, err
-	}
-
-	if replicaCfg.EnableLogger {
-		connector.SetLoggerReplica(&LoggerAdapter{log.StandardLogger()})
-	}
-
-	p := &Postgres{Connector: connector, ctx: ctx}
-
-	wg.Add(1)
-
-	go func() {
-		defer wg.Done()
-		<-ctx.Done()
-
-		err := connector.Close()
-		if err != nil {
-			log.Error("close db connection error:", err.Error())
-
-			return
-		}
-
-		log.Info("close db connection")
-	}()
-
-	return p, nil
+	return conn, nil
 }
 
-// Check checks db connection.
-func (p *Postgres) Check() (err error) {
-	return p.Connector.Health()
+// SetConn overwrites connection
+func (c *Connector) SetConn(conn *pg.DB) {
+	c.conn = conn
 }

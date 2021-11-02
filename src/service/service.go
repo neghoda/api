@@ -1,13 +1,11 @@
 package service
 
 import (
-	"context"
 	"sync"
 
 	"github.com/erp/api/src/config"
-	"github.com/erp/api/src/models"
+	"github.com/erp/api/src/storage/postgres"
 	"github.com/erp/api/src/storage/redis"
-	"github.com/google/uuid"
 )
 
 var (
@@ -18,15 +16,15 @@ var (
 type Service struct {
 	cfg      *config.Config
 	redis    *redis.Client
-	authRepo AuthRepo
-	userRepo UserRepo
+	authRepo *postgres.Connector
+	userRepo *postgres.Connector
 }
 
 func New(
 	cfg *config.Config,
 	rds *redis.Client,
-	aur AuthRepo,
-	pr UserRepo,
+	aur *postgres.Connector,
+	pr *postgres.Connector,
 ) *Service {
 	once.Do(func() {
 		service = &Service{
@@ -42,17 +40,4 @@ func New(
 
 func Get() *Service {
 	return service
-}
-
-type AuthRepo interface {
-	CreateSession(ctx context.Context, session *models.UserSession) error
-	DisableSessionByID(ctx context.Context, sessionID uuid.UUID) error
-	GetSessionByTokenID(ctx context.Context, tokenID uuid.UUID) (*models.UserSession, error)
-	UpdateSession(ctx context.Context, userSession *models.UserSession) error
-}
-
-type UserRepo interface {
-	GetUserByEmail(ctx context.Context, email string) (models.User, error)
-	CreateUser(ctx context.Context, user *models.User) error
-	EmailTaken(ctx context.Context, email string) (bool, error)
 }
