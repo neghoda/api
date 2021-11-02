@@ -7,11 +7,11 @@ PKG_PATH := $(or $(PKG),'.')
 PKG_LIST := $(shell go list ${PKG_PATH}/... | grep -v /vendor/)
 GOLINT := golangci-lint
 
-POSTGRES_MASTER_NAME := $(or $(POSTGRES_MASTER_NAME), micro-mrr-server-db)
+POSTGRES_MASTER_NAME := $(or $(POSTGRES_MASTER_NAME), api-db)
 POSTGRES_MASTER_USER := $(or $(POSTGRES_MASTER_USER), postgres)
 POSTGRES_MASTER_PASSWORD := $(or $(POSTGRES_MASTER_PASSWORD), 12345)
 
-POSTGRES_TEST_NAME := $(or $(POSTGRES_TEST_NAME), micro-mrr-server-test)
+POSTGRES_TEST_NAME := $(or $(POSTGRES_TEST_NAME), api-db-test)
 POSTGRES_TEST_USER := $(or $(POSTGRES_TEST_USER), postgres)
 POSTGRES_TEST_PASSWORD := $(or $(POSTGRES_TEST_PASSWORD), 12345)
 
@@ -58,13 +58,23 @@ migrate-linux-install: ## Install migration tool on Linux Debian
 	curl -s https://packagecloud.io/install/repositories/golang-migrate/migrate/script.deb.sh | sudo bash
 	sudo apt-get install migrate=4.4.0
 
+dc-up: ## up dockerized infrastructure
+	@docker-compose -f ./infrastructure/docker-compose.yml up -d
+
+dc-stop: ## stop dockerized infrastructure
+	@docker-compose -f ./infrastructure/docker-compose.yml stop
+
+dc-clean: ## clean up dockerized infrastructure
+	@cd ./infrastructure ; docker-compose stop ; docker-compose rm -f
+
+dc-show: ## show docker containers
+	@docker container ls --format "{{.Names}} [{{.Ports}}]"
+
+dc-postgres:
+	@docker exec -it postgres psql micro-mrr-server-db postgres
+
 migrate-up: ## Run migrations
 	$(MIGRATE) up
 
 migrate-down: ## Rollback migrations
 	$(MIGRATE) down
-
-test-db-prepare: ## cleanup test db
-	docker exec -u postgres postgres-erp dropdb api-db-test || true
-	docker exec -u postgres postgres-erp createdb api-db-test
-	$(TEST_MIGRATE) up
