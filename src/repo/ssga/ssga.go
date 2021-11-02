@@ -3,9 +3,10 @@ package ssga
 import (
 	"errors"
 	"io/ioutil"
-	"log"
 	"net/http"
 	"time"
+
+	log "github.com/sirupsen/logrus"
 
 	"golang.org/x/net/html"
 )
@@ -41,8 +42,8 @@ type Client struct {
 
 func NewClient(
 	httpClient http.Client,
-) Client {
-	return Client{
+) *Client {
+	return &Client{
 		shema:        shema,
 		host:         host,
 		contrySlug:   usContrySlug,

@@ -32,11 +32,13 @@ type Server struct {
 	config *config.HTTP
 
 	// handlers
-	auh *handlers.AuthHandler
+	auh  *handlers.AuthHandler
+	fund *handlers.FundHandler
 }
 
 func New(cfg *config.HTTP,
 	authHandler *handlers.AuthHandler,
+	fundHandler *handlers.FundHandler,
 ) (*Server, error) {
 	httpSrv := http.Server{
 		Addr: fmt.Sprintf(":%d", cfg.Port),
@@ -46,6 +48,7 @@ func New(cfg *config.HTTP,
 	srv := Server{
 		config: cfg,
 		auh:    authHandler,
+		fund:   fundHandler,
 	}
 
 	if err := srv.setupHTTP(&httpSrv); err != nil {
@@ -86,6 +89,8 @@ func (s *Server) buildHandler() (http.Handler, error) {
 
 	// private routes
 	v1Router.Handle("/logout", privateChain.ThenFunc(s.auh.Logout)).Methods(http.MethodDelete)
+	v1Router.Handle("/tickers", privateChain.ThenFunc(s.fund.GetTickerList)).Methods(http.MethodGet)
+	v1Router.Handle("/funds", privateChain.ThenFunc(s.fund.GetFundByTicker)).Methods(http.MethodGet)
 
 	// ================================= Swagger =================================================
 

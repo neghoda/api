@@ -58,7 +58,7 @@ migrate-linux-install: ## Install migration tool on Linux Debian
 	curl -s https://packagecloud.io/install/repositories/golang-migrate/migrate/script.deb.sh | sudo bash
 	sudo apt-get install migrate=4.4.0
 
-migrate-up: submodule submodule-update ## Run migrations
+migrate-up: ## Run migrations
 	$(MIGRATE) up
 
 migrate-down: ## Rollback migrations

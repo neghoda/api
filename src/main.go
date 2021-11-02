@@ -9,10 +9,13 @@ import (
 	"sync"
 	"syscall"
 
+	"github.com/erp/api/src/repo/ssga"
 	"github.com/erp/api/src/server/handlers"
 	"github.com/erp/api/src/service"
 
 	log "github.com/sirupsen/logrus"
+
+	nethttp "net/http"
 
 	"github.com/erp/api/src/config"
 	"github.com/erp/api/src/server/http"
@@ -46,12 +49,15 @@ func main() {
 	srv := service.New(
 		&cfg,
 		persistenceDB,
-		persistenceDB,
+		ssga.NewClient(
+			nethttp.Client{},
+		),
 	)
 
 	httpSrv, err := http.New(
 		&cfg.HTTPConfig,
 		handlers.NewAuthHandler(srv),
+		handlers.NewFundHandler(srv),
 	)
 
 	if err != nil {

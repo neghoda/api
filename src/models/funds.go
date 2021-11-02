@@ -3,32 +3,32 @@ package models
 import "github.com/google/uuid"
 
 type Fund struct {
-	ID          uuid.UUID
-	Name        string
-	Description string
-	Ticker      string
-	Holdings    []Holding
-	Sectors     []Sector
-	Countries   []Country
+	ID          uuid.UUID `json:"-"`
+	Name        string    `json:"name"`
+	Description string    `json:"description"`
+	Ticker      string    `json:"ticker"`
+	Holdings    []Holding `json:"holdings" sql:"-"`
+	Sectors     []Sector  `json:"sectors" sql:"-"`
+	Countries   []Country `json:"countries" sql:"-"`
 }
 
 type Holding struct {
-	FundTicker string
-	Name       string
-	Shares     string
-	Weight     string
+	FundTicker string `json:"-"`
+	Name       string `json:"name"`
+	Share      string `json:"share"`
+	Weight     string `json:"weight"`
 }
 
 type Sector struct {
-	FundTicker string
-	Name       string
-	Weight     string
+	FundTicker string `json:"-"`
+	Name       string `json:"name"`
+	Weight     string `json:"weight"`
 }
 
 type Country struct {
-	FundTicker string
-	Name       string
-	Weight     string
+	FundTicker string `json:"-"`
+	Name       string `json:"name"`
+	Weight     string `json:"weight"`
 }
 
 type CountriesInfo struct {
