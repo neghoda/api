@@ -8,7 +8,6 @@ import (
 	"time"
 
 	"github.com/erp/api/src/models"
-	"github.com/erp/api/src/storage/redis"
 	"github.com/golang-jwt/jwt"
 	"github.com/google/uuid"
 	"golang.org/x/crypto/bcrypt"
@@ -105,11 +104,6 @@ func (s Service) RefreshToken(ctx context.Context, oldTokens *models.TokenPair) 
 	accessClaims := s.parseClaims(access)
 	if accessClaims == nil {
 		return nil, models.ErrTokenClaimsInvalid
-	}
-
-	err = s.checkBlackList(accessClaims.TokenID.String())
-	if err != nil {
-		return nil, models.ErrTokenInvalid
 	}
 
 	session, err := s.authRepo.QueryContext(ctx).GetSessionByTokenID(accessClaims.TokenID)
@@ -211,21 +205,7 @@ func (s Service) Revoke(accessToken string) (*models.Claims, error) {
 		return nil, models.ErrTokenClaimsInvalid
 	}
 
-	err = s.AddToBlacklist(claims.TokenID.String(), claims.TTL())
-	if err != nil {
-		return nil, err
-	}
-
 	return claims, nil
-}
-
-// AddToBlacklist adds token to the blacklist.
-func (s Service) AddToBlacklist(tokenID string, ttl int64) error {
-	if ttl <= 0 {
-		ttl = int64(s.cfg.AccessTokenTTL)
-	}
-
-	return s.redis.Set(redis.TokenBlackListKey(tokenID), []byte{}, ttl)
 }
 
 // generateRandomString returns a URL-safe, base64 encoded securely generated random string.

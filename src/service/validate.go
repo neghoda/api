@@ -2,7 +2,6 @@ package service
 
 import (
 	"github.com/erp/api/src/models"
-	"github.com/erp/api/src/storage/redis"
 	"github.com/golang-jwt/jwt"
 )
 
@@ -18,27 +17,10 @@ func (s Service) Validate(accessToken string) (*models.UserSession, error) {
 		return nil, models.ErrTokenInvalid
 	}
 
-	if err := s.checkBlackList(claims.TokenID.String()); err != nil {
-		return nil, err
-	}
-
 	return &models.UserSession{
 		UserID:  claims.UserID,
 		TokenID: claims.TokenID,
 	}, nil
-}
-
-func (s Service) checkBlackList(tokenID string) error {
-	res, err := s.redis.Get(redis.TokenBlackListKey(tokenID))
-	if err != nil {
-		return err
-	}
-
-	if res != nil {
-		return models.ErrTokenInBlackList
-	}
-
-	return nil
 }
 
 func (s Service) parseJWT(tokenString string) (*jwt.Token, error) {

@@ -11,7 +11,6 @@ import (
 
 	"github.com/erp/api/src/server/handlers"
 	"github.com/erp/api/src/service"
-	"github.com/erp/api/src/storage/redis"
 
 	log "github.com/sirupsen/logrus"
 
@@ -42,16 +41,10 @@ func main() {
 		log.Fatal(fmt.Sprintf("cannot connect to the Postgres server %v", err))
 	}
 
-	redisClient, err := redis.New(&cfg.RedisCfg)
-	if err != nil {
-		log.WithError(err).Fatal("redis connection error")
-	}
-
 	var wg = &sync.WaitGroup{}
 
 	srv := service.New(
 		&cfg,
-		redisClient,
 		persistenceDB,
 		persistenceDB,
 	)

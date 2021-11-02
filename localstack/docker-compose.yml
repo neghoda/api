@@ -15,10 +15,4 @@ services:
       API_POSTGRES_HOST: postgres
       API_POSTGRES_PORT: "5432"
       API_POSTGRES_DB: api-db
-  redis:
-    image: redis
-    container_name: api-redis
-    command: redis-server --requirepass wu1ohr5Eipun8Eim
-    ports:
-      - 6379:6378
 
