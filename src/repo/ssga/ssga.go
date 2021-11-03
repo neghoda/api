@@ -4,7 +4,6 @@ import (
 	"errors"
 	"io/ioutil"
 	"net/http"
-	"time"
 
 	log "github.com/sirupsen/logrus"
 
@@ -68,12 +67,4 @@ func logRespStatus(resp *http.Response) {
 	}
 
 	log.Printf("Response body %v", string(resBody))
-
-	if resp.StatusCode == http.StatusInternalServerError ||
-		resp.StatusCode == http.StatusServiceUnavailable ||
-		resp.StatusCode == http.StatusBadGateway {
-		log.Println("Unacceptable response code. Sleeping")
-
-		time.Sleep(time.Minute)
-	}
 }
