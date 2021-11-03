@@ -51,27 +51,18 @@ func New(cfg *config.HTTP,
 		fund:   fundHandler,
 	}
 
-	if err := srv.setupHTTP(&httpSrv); err != nil {
-		return nil, err
-	}
+	srv.setupHTTP(&httpSrv)
 
 	return &srv, nil
 }
 
-func (s *Server) setupHTTP(srv *http.Server) error {
-	handler, err := s.buildHandler()
-	if err != nil {
-		return err
-	}
-
-	srv.Handler = handler
+func (s *Server) setupHTTP(srv *http.Server) {
+	srv.Handler = s.buildHandler()
 	s.http = srv
-
-	return nil
 }
 
 // nolint: funlen,lll
-func (s *Server) buildHandler() (http.Handler, error) {
+func (s *Server) buildHandler() http.Handler {
 	var (
 		router        = mux.NewRouter()
 		serviceRouter = router.PathPrefix(s.config.URLPrefix).Subrouter()
@@ -109,7 +100,7 @@ func (s *Server) buildHandler() (http.Handler, error) {
 		AllowedHeaders:     []string{"*"},
 		AllowCredentials:   true,
 		OptionsPassthrough: false,
-	}).Handler(router), nil
+	}).Handler(router)
 }
 
 func (s *Server) Run(ctx context.Context, wg *sync.WaitGroup) {

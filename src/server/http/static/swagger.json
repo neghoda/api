@@ -121,7 +121,7 @@
     },
     "/sign-up": {
       "post": {
-        "description": "registed new user",
+        "description": "register new user",
         "tags": [
           "auth"
         ],

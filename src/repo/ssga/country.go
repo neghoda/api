@@ -30,9 +30,6 @@ func lookForCountries(n *html.Node, fund *models.Fund) {
 func parseForCountriesJSON(countryData string, fund *models.Fund) error {
 	var countriesInfo models.CountriesInfo
 
-	// unescape JSON back
-	strings.ReplaceAll(countryData, "&#34;", "\"")
-
 	dec := json.NewDecoder(strings.NewReader(countryData))
 	err := dec.Decode(&countriesInfo)
 	if err != nil {

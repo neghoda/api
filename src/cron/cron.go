@@ -38,7 +38,7 @@ func (cw *CronWrapper) Setup() error {
 
 		_, err = c.AddFunc(cw.cfg.CronConfig, cw.syncFundsData)
 		if err != nil {
-			log.Error("Failed to setup cron job (generateMockMetrics): %v", err)
+			log.Errorf("Failed to setup cron job (generateMockMetrics): %v", err)
 		}
 
 		c.Start()

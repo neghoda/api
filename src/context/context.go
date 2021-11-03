@@ -7,10 +7,9 @@ import (
 )
 
 const (
-	userIDKey   = "device_id"
-	localeKey   = "locale"
-	userIPKey   = "user_ip"
-	userRoleKey = "user_role"
+	userIDKey = "device_id"
+	localeKey = "locale"
+	userIPKey = "user_ip"
 )
 
 // GetUserID - returns User UID from context.

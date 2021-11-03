@@ -78,7 +78,8 @@ func (s Service) updateFund(ctx context.Context, ticker string) (models.Fund, er
 		return models.Fund{}, err
 	}
 
-	if err = tx.Commit(); err != nil {
+	err = tx.Commit()
+	if err != nil {
 		return models.Fund{}, err
 	}
 
@@ -89,7 +90,7 @@ func (s Service) fetchTickerListIfRequired() error {
 	var err error
 
 	// Fetch list on request only once in hour
-	if len(mapFundTickerURL) == 0 || time.Now().Sub(lastFetched) > time.Hour {
+	if len(mapFundTickerURL) == 0 || time.Since(lastFetched) > time.Hour {
 		mapFundTickerURL, err = s.ssgaRepo.FetchFundFinderPage()
 		if err != nil {
 			return err

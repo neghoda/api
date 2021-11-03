@@ -139,7 +139,7 @@ paths:
       - auth
   /sign-up:
     post:
-      description: registed new user
+      description: register new user
       operationId: sign_up
       parameters:
       - in: body

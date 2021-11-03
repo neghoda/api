@@ -82,7 +82,8 @@ func (c Connector) WithTXContext(ctx context.Context, fn func(DBQuery) error) (e
 			return
 		}
 
-		if err = tx.Commit(); err != nil {
+		err = tx.Commit()
+		if err != nil {
 			err = errors.Wrap(err, "tx commit")
 		}
 	}()

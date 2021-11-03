@@ -20,7 +20,7 @@ func NewAuthHandler(s *service.Service) *AuthHandler {
 }
 
 // swagger:operation POST /sign-up auth sign_up
-//   registed new user
+//   register new user
 // ---
 // parameters:
 // - name: sign_up_request

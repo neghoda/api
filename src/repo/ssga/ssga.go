@@ -20,14 +20,11 @@ const (
 	fundFinderPagePath  = "bin/v1/ssmp/fund/fundfinder"
 	fundFinderPageQuery = "country=%v&language=%v&role=individual&product=etfs&ui=fund-finder"
 
-	finishedMsg     = "Finished getting data, got %v results. Time taken: %v"
-	startMsg        = "Fetching data from %v"
 	fetchingPageMsg = "Fetching page %v\r"
 )
 
 var (
 	errBadResponse = errors.New("bad response")
-	errNotFound    = errors.New("not found")
 )
 
 // Client is an SSGA client used to parse search results from ssga.com.

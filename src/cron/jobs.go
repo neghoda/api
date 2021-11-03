@@ -57,11 +57,10 @@ func (cw *CronWrapper) syncFundData(ctx context.Context, ticker, url string) {
 		return
 	}
 
-	if err = tx.Commit(); err != nil {
+	err = tx.Commit()
+	if err != nil {
 		log.Errorf(errMsg, err)
 
 		return
 	}
-
-	return
 }
