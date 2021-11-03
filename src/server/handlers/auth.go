@@ -5,8 +5,8 @@ import (
 	"net/http"
 	"strings"
 
-	"github.com/erp/api/src/models"
-	"github.com/erp/api/src/service"
+	"github.com/neghoda/api/src/models"
+	"github.com/neghoda/api/src/service"
 )
 
 type AuthHandler struct {

@@ -8,7 +8,7 @@ definitions:
         type: string
         x-go-name: Code
     type: object
-    x-go-package: github.com/erp/api/src/docs
+    x-go-package: github.com/neghoda/api/src/docs
   LoginRequest:
     properties:
       email:
@@ -18,7 +18,7 @@ definitions:
         type: string
         x-go-name: Password
     type: object
-    x-go-package: github.com/erp/api/src/models
+    x-go-package: github.com/neghoda/api/src/models
   LoginResponse:
     properties:
       access_token:
@@ -28,7 +28,7 @@ definitions:
         type: string
         x-go-name: RefreshToken
     type: object
-    x-go-package: github.com/erp/api/src/models
+    x-go-package: github.com/neghoda/api/src/models
   SignUpRequest:
     properties:
       email:
@@ -38,7 +38,7 @@ definitions:
         type: string
         x-go-name: Password
     type: object
-    x-go-package: github.com/erp/api/src/models
+    x-go-package: github.com/neghoda/api/src/models
   TokenPair:
     properties:
       access_token:
@@ -48,7 +48,7 @@ definitions:
         type: string
         x-go-name: RefreshToken
     type: object
-    x-go-package: github.com/erp/api/src/models
+    x-go-package: github.com/neghoda/api/src/models
   ValidationErr:
     properties:
       code:
@@ -65,7 +65,7 @@ definitions:
         type: object
         x-go-name: ValidationErrors
     type: object
-    x-go-package: github.com/erp/api/src/docs
+    x-go-package: github.com/neghoda/api/src/docs
 info:
   description: API for UI
   title: API Challenge.

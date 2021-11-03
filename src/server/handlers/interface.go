@@ -2,7 +2,7 @@ package handlers
 
 import (
 	"context"
-	"github.com/erp/api/src/models"
+	"github.com/neghoda/api/src/models"
 )
 
 type AuthService interface {

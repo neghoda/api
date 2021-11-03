@@ -5,7 +5,7 @@ import (
 	"errors"
 	"strings"
 
-	"github.com/erp/api/src/models"
+	"github.com/neghoda/api/src/models"
 )
 
 func toServiceError(err error) error {

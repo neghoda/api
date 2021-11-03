@@ -1,6 +1,6 @@
 package postgres
 
-import "github.com/erp/api/src/models"
+import "github.com/neghoda/api/src/models"
 
 func (q DBQuery) InsertFund(fund models.Fund) error {
 	_, err := q.Model(&fund).Insert()

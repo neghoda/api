@@ -9,7 +9,7 @@ import (
 
 	log "github.com/sirupsen/logrus"
 
-	"github.com/erp/api/src/models"
+	"github.com/neghoda/api/src/models"
 )
 
 // Fund finder page half client-side rendered. List of ETFs fetched separately as JSON

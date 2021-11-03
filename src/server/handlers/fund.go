@@ -3,8 +3,8 @@ package handlers
 import (
 	"net/http"
 
-	"github.com/erp/api/src/models"
-	"github.com/erp/api/src/service"
+	"github.com/neghoda/api/src/models"
+	"github.com/neghoda/api/src/service"
 )
 
 type FundHandler struct {

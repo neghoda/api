@@ -1,8 +1,8 @@
 package service
 
 import (
-	"github.com/erp/api/src/models"
 	"github.com/golang-jwt/jwt"
+	"github.com/neghoda/api/src/models"
 )
 
 // Validate validates access token.

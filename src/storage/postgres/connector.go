@@ -1,8 +1,8 @@
 package postgres
 
 import (
-	"github.com/erp/api/src/config"
 	"github.com/go-pg/pg"
+	"github.com/neghoda/api/src/config"
 )
 
 // Connector pg connection

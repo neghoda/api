@@ -7,9 +7,9 @@ import (
 	"strings"
 	"time"
 
-	"github.com/erp/api/src/models"
 	"github.com/golang-jwt/jwt"
 	"github.com/google/uuid"
+	"github.com/neghoda/api/src/models"
 	"golang.org/x/crypto/bcrypt"
 )
 

@@ -3,9 +3,9 @@ package service
 import (
 	"sync"
 
-	"github.com/erp/api/src/config"
-	"github.com/erp/api/src/repo/ssga"
-	"github.com/erp/api/src/storage/postgres"
+	"github.com/neghoda/api/src/config"
+	"github.com/neghoda/api/src/repo/ssga"
+	"github.com/neghoda/api/src/storage/postgres"
 )
 
 var (

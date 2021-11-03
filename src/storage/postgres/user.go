@@ -1,7 +1,7 @@
 package postgres
 
 import (
-	"github.com/erp/api/src/models"
+	"github.com/neghoda/api/src/models"
 )
 
 func (q DBQuery) GetUserByEmail(email string) (models.User, error) {

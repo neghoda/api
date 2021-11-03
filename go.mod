@@ -1,4 +1,4 @@
-module github.com/erp/api
+module github.com/neghoda/api
 
 go 1.16
 

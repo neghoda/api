@@ -230,7 +230,7 @@
           "x-go-name": "Code"
         }
       },
-      "x-go-package": "github.com/erp/api/src/docs"
+      "x-go-package": "github.com/neghoda/api/src/docs"
     },
     "LoginRequest": {
       "type": "object",
@@ -244,7 +244,7 @@
           "x-go-name": "Password"
         }
       },
-      "x-go-package": "github.com/erp/api/src/models"
+      "x-go-package": "github.com/neghoda/api/src/models"
     },
     "LoginResponse": {
       "type": "object",
@@ -258,7 +258,7 @@
           "x-go-name": "RefreshToken"
         }
       },
-      "x-go-package": "github.com/erp/api/src/models"
+      "x-go-package": "github.com/neghoda/api/src/models"
     },
     "SignUpRequest": {
       "type": "object",
@@ -272,7 +272,7 @@
           "x-go-name": "Password"
         }
       },
-      "x-go-package": "github.com/erp/api/src/models"
+      "x-go-package": "github.com/neghoda/api/src/models"
     },
     "TokenPair": {
       "type": "object",
@@ -286,7 +286,7 @@
           "x-go-name": "RefreshToken"
         }
       },
-      "x-go-package": "github.com/erp/api/src/models"
+      "x-go-package": "github.com/neghoda/api/src/models"
     },
     "ValidationErr": {
       "type": "object",
@@ -310,7 +310,7 @@
           "x-go-name": "ValidationErrors"
         }
       },
-      "x-go-package": "github.com/erp/api/src/docs"
+      "x-go-package": "github.com/neghoda/api/src/docs"
     }
   }
 }

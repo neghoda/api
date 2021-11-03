@@ -1,8 +1,8 @@
 package healthcheck
 
 import (
-	"github.com/erp/api/src/models"
-	"github.com/erp/api/src/server/handlers"
+	"github.com/neghoda/api/src/models"
+	"github.com/neghoda/api/src/server/handlers"
 	"net"
 	"net/http"
 	"runtime"

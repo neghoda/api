@@ -6,7 +6,7 @@ import (
 
 	log "github.com/sirupsen/logrus"
 
-	"github.com/erp/api/src/models"
+	"github.com/neghoda/api/src/models"
 	"golang.org/x/net/html"
 )
 

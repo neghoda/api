@@ -3,7 +3,7 @@ package ssga
 import (
 	"strings"
 
-	"github.com/erp/api/src/models"
+	"github.com/neghoda/api/src/models"
 	"golang.org/x/net/html"
 )
 

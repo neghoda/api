@@ -3,9 +3,9 @@ package middleware
 import (
 	"net/http"
 
-	reqContext "github.com/erp/api/src/context"
-	"github.com/erp/api/src/server/handlers"
-	"github.com/erp/api/src/service"
+	reqContext "github.com/neghoda/api/src/context"
+	"github.com/neghoda/api/src/server/handlers"
+	"github.com/neghoda/api/src/service"
 	log "github.com/sirupsen/logrus"
 )
 

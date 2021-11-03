@@ -7,9 +7,9 @@ import (
 	"sync"
 	"time"
 
-	"github.com/erp/api/src/config"
-	"github.com/erp/api/src/server/handlers"
-	middleware "github.com/erp/api/src/server/http/middlewares"
+	"github.com/neghoda/api/src/config"
+	"github.com/neghoda/api/src/server/handlers"
+	middleware "github.com/neghoda/api/src/server/http/middlewares"
 
 	"github.com/gorilla/mux"
 	"github.com/justinas/alice"
@@ -17,7 +17,7 @@ import (
 	log "github.com/sirupsen/logrus"
 	swagger "github.com/swaggo/http-swagger"
 
-	healthcheck "github.com/erp/api/src/server/health-check"
+	healthcheck "github.com/neghoda/api/src/server/health-check"
 )
 
 const (

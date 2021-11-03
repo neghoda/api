@@ -9,18 +9,18 @@ import (
 	"sync"
 	"syscall"
 
-	"github.com/erp/api/src/cron"
-	"github.com/erp/api/src/repo/ssga"
-	"github.com/erp/api/src/server/handlers"
-	"github.com/erp/api/src/service"
+	"github.com/neghoda/api/src/cron"
+	"github.com/neghoda/api/src/repo/ssga"
+	"github.com/neghoda/api/src/server/handlers"
+	"github.com/neghoda/api/src/service"
 
 	log "github.com/sirupsen/logrus"
 
 	nethttp "net/http"
 
-	"github.com/erp/api/src/config"
-	"github.com/erp/api/src/server/http"
-	"github.com/erp/api/src/storage/postgres"
+	"github.com/neghoda/api/src/config"
+	"github.com/neghoda/api/src/server/http"
+	"github.com/neghoda/api/src/storage/postgres"
 )
 
 func main() {

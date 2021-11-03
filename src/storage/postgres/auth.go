@@ -4,8 +4,8 @@ import (
 	"context"
 	"time"
 
-	"github.com/erp/api/src/models"
 	"github.com/google/uuid"
+	"github.com/neghoda/api/src/models"
 )
 
 func (q DBQuery) CreateSession(ctx context.Context, session *models.UserSession) error {

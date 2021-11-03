@@ -6,7 +6,7 @@ import (
 	"sort"
 	"time"
 
-	"github.com/erp/api/src/models"
+	"github.com/neghoda/api/src/models"
 )
 
 var (

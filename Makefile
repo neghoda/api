@@ -51,7 +51,7 @@ swagger: check-swagger
 	swagger generate spec -o src/server/http/static/swagger.json  -w ./ --scan-models
 
 fmt: ## format source files
-	go fmt github.com/erp/api/src/...
+	go fmt github.com/neghoda/api/src/...
 
 migrate-macos-install: ## Install migration tool on MacOS
 	brew install golang-migrate
