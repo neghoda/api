@@ -52,7 +52,12 @@ func (s Service) FundByTicker(ctx context.Context, ticker string) (models.Fund, 
 }
 
 func (s Service) updateFund(ctx context.Context, ticker string) (models.Fund, error) {
-	fund, err := s.ssgaRepo.FetchFundPage(mapFundTickerURL[ticker])
+	fundURL, ok := mapFundTickerURL[ticker]
+	if !ok {
+		return models.Fund{}, models.ErrNotFound
+	}
+
+	fund, err := s.ssgaRepo.FetchFundPage(fundURL)
 	if err != nil {
 		return models.Fund{}, err
 	}
