@@ -7,12 +7,38 @@
 	"item": [
 		{
 			"name": "sign-up",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"var baseURL = pm.environment.get(\"base_url\");",
+							"",
+							"console.log(baseURL)",
+							"",
+							"if(!baseURL) {",
+							"    postman.setEnvironmentVariable(\"base_url\", \"https://api9a9rurcijyqae.herokuapp.com\");",
+							"}"
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
 			"request": {
 				"method": "POST",
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n    \"email\": \"test@test.com\",\n    \"password\": \"Qwerty123\"\n}"
+					"raw": "{\n    \"email\": \"test@test.com\",\n    \"password\": \"Qwerty123\" \n}"
 				},
 				"url": {
 					"raw": "{{base_url}}/api/v1/signup",
@@ -30,6 +56,30 @@
 		},
 		{
 			"name": "login",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"var jsonData = pm.response.json();",
+							"console.log(jsonData.tokens_pair.access_token);",
+							"console.log(jsonData.tokens_pair.refresh_token);",
+							"postman.setEnvironmentVariable(\"access_token\", jsonData.tokens_pair.access_token);",
+							"postman.setEnvironmentVariable(\"refresh_token\", jsonData.tokens_pair.refresh_token);"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
 			"request": {
 				"method": "POST",
 				"header": [],
@@ -58,7 +108,7 @@
 				"header": [
 					{
 						"key": "Authorization",
-						"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJTZXNzaW9uSUQiOiI2ODBlOTZjMi1hNGUwLTQ2MzEtYWQyZi00OWRmNzYzOTlhZTUiLCJUb2tlbklEIjoiNDQ0ZDIzMDEtYTE5Ni00ZTk5LWE4NmMtNDY2ZmU5MDI1OGM0IiwiVXNlcklEIjoiNzMzNTEyZTctMDBmMy00NDg2LWE5YzktZjRlMjk3YjY1ZmMxIiwiZXhwIjoxNjM1ODQ5NTEwfQ.JbUtQbbOkF4HY4aqw73qU7cKyhgAyEOvL1dJ6gE9PsA",
+						"value": "Bearer {{access_token}}",
 						"type": "text"
 					}
 				],
@@ -78,12 +128,34 @@
 		},
 		{
 			"name": "refresh token",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"var jsonData = pm.response.json();",
+							"console.log(jsonData.access_token);",
+							"console.log(jsonData.refresh_token);",
+							"postman.setEnvironmentVariable(\"access_token\", jsonData.access_token);",
+							"postman.setEnvironmentVariable(\"refresh_token\", jsonData.refresh_token);"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
 			"request": {
 				"method": "POST",
-				"header": [],
+				"header": [
+					{
+						"key": "",
+						"value": "",
+						"type": "text",
+						"disabled": true
+					}
+				],
 				"body": {
 					"mode": "raw",
-					"raw": " {\n        \"access_token\": \"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJTZXNzaW9uSUQiOiIwNDA1Mjg4Zi04M2RiLTQzYjQtOWViMC1kMWZkN2JlYmMxYzUiLCJUb2tlbklEIjoiNGM1MTc4MzYtNTdjOS00NGFhLWI0OWYtOGRkMDAzYzhlNzQyIiwiVXNlcklEIjoiNzMzNTEyZTctMDBmMy00NDg2LWE5YzktZjRlMjk3YjY1ZmMxIiwiZXhwIjoxNjM1NzY1ODIwfQ.O9uVDoEDKaCSScTjswf8q3ZkW9-1bOiJDSmU-Ji3sDU\",\n        \"refresh_token\": \"BOd8R3W_HMd6BgI5U-hPMKClqqxaIanowuEQ7yNL-LQ=\"\n    }\n"
+					"raw": "{\n    \"access_token\": \"{{access_token}}\",\n    \"refresh_token\": \"{{refresh_token}}\"\n}"
 				},
 				"url": {
 					"raw": "{{base_url}}/api/v1/token",
@@ -125,7 +197,7 @@
 				"header": [
 					{
 						"key": "Authorization",
-						"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJTZXNzaW9uSUQiOiIwNTZkZDk5Mi02YWVmLTQ2ZjUtYWFmNi04Y2RjMmZlNGFjY2MiLCJUb2tlbklEIjoiNWVhZWNjNTYtNzg2Mi00OTZmLThkN2QtZmI0ZDgwNmVhODVkIiwiVXNlcklEIjoiNzMzNTEyZTctMDBmMy00NDg2LWE5YzktZjRlMjk3YjY1ZmMxIiwiZXhwIjoxNjM1ODY4NTY3fQ.BGO_3ZsiquKA4IbS3jouSw78LDyhZTjwE2DHiv7cjGk",
+						"value": "Bearer {{access_token}}",
 						"type": "text"
 					}
 				],
@@ -150,12 +222,12 @@
 				"header": [
 					{
 						"key": "Authorization",
-						"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJTZXNzaW9uSUQiOiIwNTZkZDk5Mi02YWVmLTQ2ZjUtYWFmNi04Y2RjMmZlNGFjY2MiLCJUb2tlbklEIjoiNWVhZWNjNTYtNzg2Mi00OTZmLThkN2QtZmI0ZDgwNmVhODVkIiwiVXNlcklEIjoiNzMzNTEyZTctMDBmMy00NDg2LWE5YzktZjRlMjk3YjY1ZmMxIiwiZXhwIjoxNjM1ODY4NTY3fQ.BGO_3ZsiquKA4IbS3jouSw78LDyhZTjwE2DHiv7cjGk",
+						"value": "Bearer {{access_token}}",
 						"type": "text"
 					}
 				],
 				"url": {
-					"raw": "{{base_url}}/api/v1/funds?ticker=ONEO",
+					"raw": "{{base_url}}/api/v1/funds?ticker=SPYD",
 					"host": [
 						"{{base_url}}"
 					],
@@ -167,7 +239,7 @@
 					"query": [
 						{
 							"key": "ticker",
-							"value": "ONEO"
+							"value": "SPYD"
 						}
 					]
 				}
