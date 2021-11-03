@@ -20,4 +20,4 @@ Postman collection located at the repo root [api.postman_collection.json]
 
 ## TODO
 
-- Tokens blacklisting
+- Token blacklisting
