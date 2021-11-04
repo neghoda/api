@@ -56,7 +56,7 @@ type AuthRepo interface {
 
 type FundRepo interface {
 	FetchFund(ctx context.Context, ticker string) (models.Fund, error)
-	ReplaceFund(ctx context.Context, fund models.Fund) error
+	ReplaceFund(ctx context.Context, fund *models.Fund) error
 }
 
 type UserRepo interface {

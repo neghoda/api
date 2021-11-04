@@ -62,7 +62,9 @@ func (s Service) replaceFund(ctx context.Context, ticker string) (models.Fund, e
 		return models.Fund{}, err
 	}
 
-	return fund, s.fundRepo.ReplaceFund(ctx, fund)
+	err = s.fundRepo.ReplaceFund(ctx, &fund)
+
+	return fund, err
 }
 
 func (s Service) fetchTickerListIfRequired() error {

@@ -54,7 +54,7 @@ func (fr *FundRepo) FetchFund(ctx context.Context, ticker string) (models.Fund, 
 	return fund, toServiceError(err)
 }
 
-func (fr *FundRepo) ReplaceFund(ctx context.Context, fund models.Fund) error {
+func (fr *FundRepo) ReplaceFund(ctx context.Context, fund *models.Fund) error {
 	err := fr.WithTXContext(ctx, func(query DBQuery) error {
 		err := deleteFund(query, fund.Ticker)
 		if err != nil {
@@ -101,28 +101,28 @@ func deleteFund(query DBQuery, ticker string) error {
 	return toServiceError(err)
 }
 
-func insertFund(query DBQuery, fund models.Fund) error {
-	_, err := query.Model(&fund).Insert()
+func insertFund(query DBQuery, fund *models.Fund) error {
+	_, err := query.Model(fund).Insert()
 	if err != nil {
 		return toServiceError(err)
 	}
 
 	if len(fund.Holdings) != 0 {
-		_, err = query.Model(&fund.Holdings).Insert()
+		_, err = query.Model(fund.Holdings).Insert()
 		if err != nil {
 			return toServiceError(err)
 		}
 	}
 
 	if len(fund.Sectors) != 0 {
-		_, err = query.Model(&fund.Sectors).Insert()
+		_, err = query.Model(fund.Sectors).Insert()
 		if err != nil {
 			return toServiceError(err)
 		}
 	}
 
 	if len(fund.Countries) != 0 {
-		_, err = query.Model(&fund.Countries).Insert()
+		_, err = query.Model(fund.Countries).Insert()
 		if err != nil {
 			return toServiceError(err)
 		}

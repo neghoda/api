@@ -20,14 +20,14 @@ func (cw *CronWrapper) syncFundsData() {
 		log.Errorf(errMsg, err)
 	}
 
-	for ticker, url := range mapFundTickerURL {
-		cw.syncFundData(context.Background(), ticker, url)
+	for _, url := range mapFundTickerURL {
+		cw.syncFundData(context.Background(), url)
 	}
 
 	log.Printf(finishedMsg, time.Since(start))
 }
 
-func (cw *CronWrapper) syncFundData(ctx context.Context, ticker, url string) {
+func (cw *CronWrapper) syncFundData(ctx context.Context, url string) {
 	fund, err := cw.ssgaRepo.FetchFundPage(url)
 	if err != nil {
 		log.Errorf(errMsg, err)
@@ -35,7 +35,7 @@ func (cw *CronWrapper) syncFundData(ctx context.Context, ticker, url string) {
 		return
 	}
 
-	err = cw.fundRepo.ReplaceFund(ctx, fund)
+	err = cw.fundRepo.ReplaceFund(ctx, &fund)
 	if err != nil {
 		log.Errorf(errMsg, err)
 

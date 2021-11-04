@@ -7,7 +7,6 @@ import (
 	"net/http"
 	"regexp"
 	"strings"
-	"unicode"
 
 	log "github.com/sirupsen/logrus"
 
@@ -149,37 +148,4 @@ func ParseAuthorizationHeader(header, schema string) (string, error) {
 	}
 
 	return authSlice[1], nil
-}
-
-func ValidatePassword(password string) bool {
-	var (
-		hasUpper  = false
-		hasLower  = false
-		hasNumber = false
-	)
-
-	if !(len(password) >= 8) || !(len(password) <= 50) {
-		return false
-	}
-
-	for _, char := range password {
-		switch {
-		case unicode.IsUpper(char):
-			hasUpper = true
-		case unicode.IsLower(char):
-			hasLower = true
-		case unicode.IsNumber(char):
-			hasNumber = true
-		}
-	}
-
-	return hasUpper && hasLower && hasNumber
-}
-
-func ValidateEmail(email string) bool {
-	if m, _ := regexp.MatchString(`^([\w\.\_]{2,10})@(\w{1,}).([a-z]{2,4})$`, email); !m {
-		return false
-	}
-
-	return true
 }
