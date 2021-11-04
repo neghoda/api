@@ -42,10 +42,10 @@ Postman collection located at the repo root [api.postman_collection.json]
 ```HTTP_SWAGGER_SERVE_DIR``` - location of swagger files. default "src/server/http/static"\
 ```HTTP_CORS_ALLOWED_HOST``` - CORS host settings. default "*"\
 
-```POSTGRES_MASTER_HOST```     - default localhost
-```POSTGRES_MASTER_NAME```     - default postgres
-```POSTGRES_MASTER_USER```     - default postgres
-```POSTGRES_MASTER_PASSWORD``` - default 12345
+```POSTGRES_MASTER_HOST```     - default localhost\
+```POSTGRES_MASTER_NAME```     - default postgres\
+```POSTGRES_MASTER_USER```     - default postgres\
+```POSTGRES_MASTER_PASSWORD``` - default 12345\
 ```POSTGRES_POOL_SIZE```       - default 10\
 ```POSTGRES_MAX_RETRIES```     - default 5\
 ```POSTGRES_READ_TIMEOUT```    - default 10 sec\
