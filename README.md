@@ -7,7 +7,7 @@ Postman collection located at the repo root [api.postman_collection.json]
 - docker
 - docker-compose
 - PostgreSQL
-- golang:1.14.4
+- golang:1.17
 
 ## How to setup API for development
 
