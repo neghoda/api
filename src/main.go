@@ -11,7 +11,6 @@ import (
 
 	"github.com/neghoda/api/src/cron"
 	"github.com/neghoda/api/src/repo/ssga"
-	"github.com/neghoda/api/src/server/handlers"
 	"github.com/neghoda/api/src/service"
 
 	log "github.com/sirupsen/logrus"
@@ -52,7 +51,7 @@ func main() {
 	)
 
 	srv := service.New(
-		&cfg,
+		cfg,
 		persistenceDB.NewAuthRepo(),
 		persistenceDB.NewFundRepo(),
 		persistenceDB.NewUserRepo(),
@@ -60,7 +59,7 @@ func main() {
 	)
 
 	crowWrapper := cron.NewCronWrapper(
-		&cfg,
+		cfg,
 		persistenceDB.NewFundRepo(),
 		ssgaClient,
 	)
@@ -72,8 +71,7 @@ func main() {
 
 	httpSrv, err := http.New(
 		&cfg.HTTPConfig,
-		handlers.NewAuthHandler(srv),
-		handlers.NewFundHandler(srv),
+		srv,
 	)
 
 	if err != nil {

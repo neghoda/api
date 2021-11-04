@@ -10,6 +10,7 @@ import (
 	"github.com/neghoda/api/src/config"
 	"github.com/neghoda/api/src/server/handlers"
 	middleware "github.com/neghoda/api/src/server/http/middlewares"
+	"github.com/neghoda/api/src/service"
 
 	"github.com/gorilla/mux"
 	"github.com/justinas/alice"
@@ -36,24 +37,21 @@ type Server struct {
 	fund *handlers.FundHandler
 }
 
-func New(cfg *config.HTTP,
-	authHandler *handlers.AuthHandler,
-	fundHandler *handlers.FundHandler,
-) (*Server, error) {
+func New(cfg *config.HTTP, srv *service.Service) (*Server, error) {
 	httpSrv := http.Server{
 		Addr: fmt.Sprintf(":%d", cfg.Port),
 	}
 
 	// build Server
-	srv := Server{
+	server := Server{
 		config: cfg,
-		auh:    authHandler,
-		fund:   fundHandler,
+		auh:    handlers.NewAuthHandler(srv),
+		fund:   handlers.NewFundHandler(srv),
 	}
 
-	srv.setupHTTP(&httpSrv)
+	server.setupHTTP(&httpSrv)
 
-	return &srv, nil
+	return &server, nil
 }
 
 func (s *Server) setupHTTP(srv *http.Server) {
