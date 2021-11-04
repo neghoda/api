@@ -5,5 +5,5 @@ RUN CGO_ENABLED=0 go build -mod=mod -o api -a ./src
 
 FROM alpine
 COPY --from=builder ./bin/api /
-COPY ./src/server/http/static /swaggerui
+COPY ./src/server/http/static ./src/server/http/static
 CMD ["/api"]

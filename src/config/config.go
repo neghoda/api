@@ -8,7 +8,6 @@ type Config struct {
 	LogLevel          string   `mapstructure:"LOG_LEVEL" default:"DEBUG"`
 	HTTPConfig        HTTP     `mapstructure:"HTTP_SERVER"`
 	PostgresCfg       Postgres `mapstructure:"POSTGRES_MASTER"`
-	PostgresTestCfg   Postgres `mapstructure:"POSTGRES_TEST"`
 	RefreshTokenLen   int      `mapstructure:"REFRESH_TOKEN_LEN" default:"32"`
 	AccessTokenTTL    int      `mapstructure:"ACCESS_TOKEN_TTL_SEC" default:"900"` // seconds
 	AccessTokenSecret string   `mapstructure:"ACCESS_TOKEN_SECRET" default:""`
