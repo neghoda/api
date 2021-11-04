@@ -108,21 +108,21 @@ func insertFund(query DBQuery, fund *models.Fund) error {
 	}
 
 	if len(fund.Holdings) != 0 {
-		_, err = query.Model(fund.Holdings).Insert()
+		_, err = query.Model(&fund.Holdings).Insert()
 		if err != nil {
 			return toServiceError(err)
 		}
 	}
 
 	if len(fund.Sectors) != 0 {
-		_, err = query.Model(fund.Sectors).Insert()
+		_, err = query.Model(&fund.Sectors).Insert()
 		if err != nil {
 			return toServiceError(err)
 		}
 	}
 
 	if len(fund.Countries) != 0 {
-		_, err = query.Model(fund.Countries).Insert()
+		_, err = query.Model(&fund.Countries).Insert()
 		if err != nil {
 			return toServiceError(err)
 		}
