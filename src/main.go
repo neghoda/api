@@ -39,8 +39,7 @@ func main() {
 	ctx, cancel := context.WithCancel(context.Background())
 	setupGracefulShutdown(cancel)
 
-	persistenceDB := postgres.New()
-	err = persistenceDB.NewConn(&cfg.PostgresCfg)
+	persistenceDB, err := postgres.NewConn(&cfg.PostgresCfg)
 	if err != nil {
 		log.Fatal(fmt.Sprintf("cannot connect to the Postgres server %v", err))
 	}
@@ -54,13 +53,15 @@ func main() {
 
 	srv := service.New(
 		&cfg,
-		persistenceDB,
+		persistenceDB.NewAuthRepo(),
+		persistenceDB.NewFundRepo(),
+		persistenceDB.NewUserRepo(),
 		ssgaClient,
 	)
 
 	crowWrapper := cron.NewCronWrapper(
 		&cfg,
-		persistenceDB,
+		persistenceDB.NewFundRepo(),
 		ssgaClient,
 	)
 

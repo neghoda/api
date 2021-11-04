@@ -1,48 +1,30 @@
 package postgres
 
-import "github.com/neghoda/api/src/models"
+import (
+	"context"
 
-func (q DBQuery) InsertFund(fund models.Fund) error {
-	_, err := q.Model(&fund).Insert()
-	if err != nil {
-		return toServiceError(err)
-	}
+	"github.com/neghoda/api/src/models"
+)
 
-	if len(fund.Holdings) != 0 {
-		_, err = q.Model(&fund.Holdings).Insert()
-		if err != nil {
-			return toServiceError(err)
-		}
-	}
-
-	if len(fund.Sectors) != 0 {
-		_, err = q.Model(&fund.Sectors).Insert()
-		if err != nil {
-			return toServiceError(err)
-		}
-	}
-
-	if len(fund.Countries) != 0 {
-		_, err = q.Model(&fund.Countries).Insert()
-		if err != nil {
-			return toServiceError(err)
-		}
-	}
-
-	return toServiceError(err)
+type FundRepo struct {
+	*Connector
 }
 
-func (q DBQuery) FetchFund(ticker string) (models.Fund, error) {
+func (c *Connector) NewFundRepo() *FundRepo {
+	return &FundRepo{c}
+}
+
+func (fr *FundRepo) FetchFund(ctx context.Context, ticker string) (models.Fund, error) {
 	var fund models.Fund
 
-	err := q.Model(&fund).
+	err := fr.QueryContext(ctx).Model(&fund).
 		Where("ticker = ?", ticker).
 		Select()
 	if err != nil {
 		return fund, toServiceError(err)
 	}
 
-	err = q.Model(&fund.Holdings).
+	err = fr.QueryContext(ctx).Model(&fund.Holdings).
 		Where("fund_ticker = ?", ticker).
 		OrderExpr("length(weight) DESC").
 		Order("weight DESC").
@@ -51,7 +33,7 @@ func (q DBQuery) FetchFund(ticker string) (models.Fund, error) {
 		return fund, toServiceError(err)
 	}
 
-	err = q.Model(&fund.Sectors).
+	err = fr.QueryContext(ctx).Model(&fund.Sectors).
 		Where("fund_ticker = ?", ticker).
 		OrderExpr("length(weight) DESC").
 		Order("weight DESC").
@@ -60,7 +42,7 @@ func (q DBQuery) FetchFund(ticker string) (models.Fund, error) {
 		return fund, toServiceError(err)
 	}
 
-	err = q.Model(&fund.Countries).
+	err = fr.QueryContext(ctx).Model(&fund.Countries).
 		Where("fund_ticker = ?", ticker).
 		OrderExpr("length(weight) DESC").
 		Order("weight DESC").
@@ -72,35 +54,78 @@ func (q DBQuery) FetchFund(ticker string) (models.Fund, error) {
 	return fund, toServiceError(err)
 }
 
-func (q DBQuery) DeleteFund(ticker string) error {
+func (fr *FundRepo) ReplaceFund(ctx context.Context, fund models.Fund) error {
+	err := fr.WithTXContext(ctx, func(query DBQuery) error {
+		err := deleteFund(query, fund.Ticker)
+		if err != nil {
+			return err
+		}
+
+		return insertFund(query, fund)
+	})
+
+	return toServiceError(err)
+}
+
+func deleteFund(query DBQuery, ticker string) error {
 	var fund models.Fund
 
-	_, err := q.Model(&fund).
+	_, err := query.Model(&fund).
 		Where("ticker = ?", ticker).
 		Delete()
 	if err != nil {
 		return toServiceError(err)
 	}
 
-	_, err = q.Model(&fund.Holdings).
+	_, err = query.Model(&fund.Holdings).
 		Where("fund_ticker = ?", ticker).
 		Delete()
 	if err != nil {
 		return toServiceError(err)
 	}
 
-	_, err = q.Model(&fund.Sectors).
+	_, err = query.Model(&fund.Sectors).
 		Where("fund_ticker = ?", ticker).
 		Delete()
 	if err != nil {
 		return toServiceError(err)
 	}
 
-	_, err = q.Model(&fund.Countries).
+	_, err = query.Model(&fund.Countries).
 		Where("fund_ticker = ?", ticker).
 		Delete()
 	if err != nil {
 		return toServiceError(err)
+	}
+
+	return toServiceError(err)
+}
+
+func insertFund(query DBQuery, fund models.Fund) error {
+	_, err := query.Model(&fund).Insert()
+	if err != nil {
+		return toServiceError(err)
+	}
+
+	if len(fund.Holdings) != 0 {
+		_, err = query.Model(&fund.Holdings).Insert()
+		if err != nil {
+			return toServiceError(err)
+		}
+	}
+
+	if len(fund.Sectors) != 0 {
+		_, err = query.Model(&fund.Sectors).Insert()
+		if err != nil {
+			return toServiceError(err)
+		}
+	}
+
+	if len(fund.Countries) != 0 {
+		_, err = query.Model(&fund.Countries).Insert()
+		if err != nil {
+			return toServiceError(err)
+		}
 	}
 
 	return toServiceError(err)

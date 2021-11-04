@@ -5,7 +5,7 @@ import (
 
 	"github.com/neghoda/api/src/config"
 	"github.com/neghoda/api/src/repo/ssga"
-	"github.com/neghoda/api/src/storage/postgres"
+	"github.com/neghoda/api/src/service"
 	"github.com/robfig/cron/v3"
 	log "github.com/sirupsen/logrus"
 )
@@ -14,18 +14,18 @@ var once = &sync.Once{}
 
 type CronWrapper struct {
 	cfg      *config.Config
-	db       *postgres.Connector
+	fundRepo service.FundRepo
 	ssgaRepo *ssga.Client
 }
 
 func NewCronWrapper(
 	cfg *config.Config,
-	db *postgres.Connector,
+	fundRepo service.FundRepo,
 	ssgaRepo *ssga.Client,
 ) *CronWrapper {
 	return &CronWrapper{
 		cfg:      cfg,
-		db:       db,
+		fundRepo: fundRepo,
 		ssgaRepo: ssgaRepo,
 	}
 }

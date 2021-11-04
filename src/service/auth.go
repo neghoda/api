@@ -16,7 +16,7 @@ import (
 const hoursInDay = 24
 
 func (s Service) SignUp(ctx context.Context, email, password string) error {
-	emailTaken, err := s.db.QueryContext(ctx).EmailTaken(email)
+	emailTaken, err := s.userRepo.EmailTaken(ctx, email)
 	if err != nil {
 		return err
 	}
@@ -37,13 +37,13 @@ func (s Service) SignUp(ctx context.Context, email, password string) error {
 		UpdatedAt: time.Now(),
 	}
 
-	return s.db.QueryContext(ctx).CreateUser(user)
+	return s.userRepo.CreateUser(ctx, user)
 }
 
 func (s Service) Login(ctx context.Context, email, password string) (models.TokenPair, error) {
 	var tokenPair models.TokenPair
 
-	user, err := s.db.QueryContext(ctx).GetUserByEmail(email)
+	user, err := s.userRepo.GetUserByEmail(ctx, email)
 	if err != nil {
 		return tokenPair, err
 	}
@@ -86,7 +86,7 @@ func (s Service) Logout(ctx context.Context, accessToken string) (err error) {
 		return err
 	}
 
-	err = s.db.QueryContext(ctx).DisableSessionByID(claims.SessionID)
+	err = s.authRepo.DisableSessionByID(ctx, claims.SessionID)
 	if err != nil {
 		return err
 	}
@@ -106,7 +106,7 @@ func (s Service) RefreshToken(ctx context.Context, oldTokens *models.TokenPair) 
 		return nil, models.ErrTokenClaimsInvalid
 	}
 
-	session, err := s.db.QueryContext(ctx).GetSessionByTokenID(accessClaims.TokenID)
+	session, err := s.authRepo.GetSessionByTokenID(ctx, accessClaims.TokenID)
 	if err != nil {
 		return nil, models.ErrSessionNotFound
 	}
@@ -134,7 +134,7 @@ func (s Service) RefreshToken(ctx context.Context, oldTokens *models.TokenPair) 
 	session.TokenID = claims.TokenID
 	session.UpdatedAt = &now
 
-	err = s.db.QueryContext(ctx).UpdateSession(session)
+	err = s.authRepo.UpdateSession(ctx, session)
 	if err != nil {
 		return nil, err
 	}
@@ -190,7 +190,7 @@ func (s Service) createSession(ctx context.Context, claims *models.Claims, token
 		ExpiredAt:    &expiredAt,
 	}
 
-	return s.db.QueryContext(ctx).CreateSession(ctx, &session)
+	return s.authRepo.CreateSession(ctx, &session)
 }
 
 // Revoke revokes access token.

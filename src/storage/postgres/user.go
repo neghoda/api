@@ -1,27 +1,39 @@
 package postgres
 
 import (
+	"context"
+
 	"github.com/neghoda/api/src/models"
 )
 
-func (q DBQuery) GetUserByEmail(email string) (models.User, error) {
+type UserRepo struct {
+	*Connector
+}
+
+func (c *Connector) NewUserRepo() *UserRepo {
+	return &UserRepo{c}
+}
+
+func (ur *UserRepo) GetUserByEmail(ctx context.Context, email string) (models.User, error) {
 	var user models.User
 
-	err := q.Model(&user).
+	err := ur.QueryContext(ctx).
+		Model(&user).
 		Where("?TableAlias.email = ?", email).
 		First()
 
 	return user, toServiceError(err)
 }
 
-func (q DBQuery) CreateUser(user *models.User) error {
-	_, err := q.Model(user).Insert()
+func (ur *UserRepo) CreateUser(ctx context.Context, user *models.User) error {
+	_, err := ur.QueryContext(ctx).Model(user).Insert()
 
 	return toServiceError(err)
 }
 
-func (q DBQuery) EmailTaken(email string) (bool, error) {
-	exist, err := q.Model((*models.User)(nil)).
+func (ur *UserRepo) EmailTaken(ctx context.Context, email string) (bool, error) {
+	exist, err := ur.QueryContext(ctx).
+		Model((*models.User)(nil)).
 		Where("?TableAlias.email = ?", email).
 		Exists()
 

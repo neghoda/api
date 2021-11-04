@@ -8,26 +8,35 @@ import (
 	"github.com/neghoda/api/src/models"
 )
 
-func (q DBQuery) CreateSession(ctx context.Context, session *models.UserSession) error {
-	_, err := q.Model(session).Insert()
+type AuthRepo struct {
+	*Connector
+}
+
+func (c *Connector) NewAuthRepo() *AuthRepo {
+	return &AuthRepo{c}
+}
+
+func (ar *AuthRepo) CreateSession(ctx context.Context, session *models.UserSession) error {
+	_, err := ar.QueryContext(ctx).Model(session).Insert()
 
 	return err
 }
 
-func (q DBQuery) DisableSessionByID(sessionID uuid.UUID) error {
+func (ar *AuthRepo) DisableSessionByID(ctx context.Context, sessionID uuid.UUID) error {
 	expiredAt := time.Now().UTC()
 	session := models.UserSession{
 		ID:        sessionID,
 		ExpiredAt: &expiredAt,
 	}
-	_, err := q.Model(&session).WherePK().UpdateNotNull()
+	_, err := ar.QueryContext(ctx).Model(&session).WherePK().UpdateNotNull()
 
 	return err
 }
 
-func (q DBQuery) GetSessionByTokenID(tokenID uuid.UUID) (*models.UserSession, error) {
+func (ar *AuthRepo) GetSessionByTokenID(ctx context.Context, tokenID uuid.UUID) (*models.UserSession, error) {
 	session := &models.UserSession{}
-	err := q.Model(session).
+	err := ar.QueryContext(ctx).
+		Model(session).
 		Where("token_id = ?", tokenID).
 		Limit(1).
 		Select()
@@ -35,8 +44,11 @@ func (q DBQuery) GetSessionByTokenID(tokenID uuid.UUID) (*models.UserSession, er
 	return session, err
 }
 
-func (q DBQuery) UpdateSession(userSession *models.UserSession) error {
-	_, err := q.Model(userSession).WherePK().Update()
+func (ar *AuthRepo) UpdateSession(ctx context.Context, userSession *models.UserSession) error {
+	_, err := ar.QueryContext(ctx).
+		Model(userSession).
+		WherePK().
+		Update()
 
 	return err
 }
