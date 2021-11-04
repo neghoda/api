@@ -34,7 +34,7 @@ Postman collection located at the repo root [api.postman_collection.json]
 ```ACCESS_TOKEN_SECRET```  - default ""\
 ```USER_SESSION_TTL_SEC``` - default 86400 sec
 
-```CRON_CONFIG``` - when to sync fund data. default "46 16 * * *"(every day in 4:46PM)
+```CRON_CONFIG``` - when to sync data with ssga.com. default "46 16 * * *"(every day at 4:46PM)
 
 ```HTTP_SERVER_PORT```       - default :8080\
 ```HTTP_SERVER_URL_PREFIX``` - default "/api"\
