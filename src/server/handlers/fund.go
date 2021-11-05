@@ -4,14 +4,13 @@ import (
 	"net/http"
 
 	"github.com/neghoda/api/src/models"
-	"github.com/neghoda/api/src/service"
 )
 
 type FundHandler struct {
-	service *service.Service
+	service FundService
 }
 
-func NewFundHandler(s *service.Service) *FundHandler {
+func NewFundHandler(s FundService) *FundHandler {
 	return &FundHandler{
 		service: s,
 	}

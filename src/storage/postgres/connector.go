@@ -10,15 +10,16 @@ type Connector struct {
 	conn *pg.DB
 }
 
-// New returns postgres Connector
-func New() *Connector {
-	return &Connector{}
-}
-
 // NewConn init, overwrite connection
-func (c *Connector) NewConn(mainCfg *config.Postgres) (err error) {
+func NewConn(mainCfg *config.Postgres) (*Connector, error) {
+	var (
+		c   Connector
+		err error
+	)
+
 	c.conn, err = newConn(mainCfg)
-	return
+
+	return &c, err
 }
 
 // newConn init connection
@@ -41,9 +42,4 @@ func newConn(mainCfg *config.Postgres) (*pg.DB, error) {
 	}
 
 	return conn, nil
-}
-
-// SetConn overwrites connection
-func (c *Connector) SetConn(conn *pg.DB) {
-	c.conn = conn
 }

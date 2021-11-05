@@ -36,10 +36,10 @@ func (s Service) FundByTicker(ctx context.Context, ticker string) (models.Fund, 
 		return models.Fund{}, err
 	}
 
-	fund, err := s.db.QueryContext(ctx).FetchFund(ticker)
+	fund, err := s.fundRepo.FetchFund(ctx, ticker)
 	if errors.Is(err, models.ErrNotFound) {
 		// Fetch and store fund if there no data in DB
-		fund, err = s.updateFund(ctx, ticker)
+		fund, err = s.replaceFund(ctx, ticker)
 		if err != nil {
 			return fund, err
 		}
@@ -51,7 +51,7 @@ func (s Service) FundByTicker(ctx context.Context, ticker string) (models.Fund, 
 	return fund, err
 }
 
-func (s Service) updateFund(ctx context.Context, ticker string) (models.Fund, error) {
+func (s Service) replaceFund(ctx context.Context, ticker string) (models.Fund, error) {
 	fundURL, ok := mapFundTickerURL[ticker]
 	if !ok {
 		return models.Fund{}, models.ErrNotFound
@@ -62,26 +62,7 @@ func (s Service) updateFund(ctx context.Context, ticker string) (models.Fund, er
 		return models.Fund{}, err
 	}
 
-	tx, err := s.db.NewTXContext(ctx)
-	if err != nil {
-		return models.Fund{}, err
-	}
-	defer tx.Rollback()
-
-	err = tx.DeleteFund(ticker)
-	if err != nil {
-		return models.Fund{}, err
-	}
-
-	err = tx.InsertFund(fund)
-	if err != nil {
-		return models.Fund{}, err
-	}
-
-	err = tx.Commit()
-	if err != nil {
-		return models.Fund{}, err
-	}
+	err = s.fundRepo.ReplaceFund(ctx, &fund)
 
 	return fund, err
 }

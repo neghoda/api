@@ -3,17 +3,15 @@ package handlers
 import (
 	"errors"
 	"net/http"
-	"strings"
 
 	"github.com/neghoda/api/src/models"
-	"github.com/neghoda/api/src/service"
 )
 
 type AuthHandler struct {
-	service *service.Service
+	service AuthService
 }
 
-func NewAuthHandler(s *service.Service) *AuthHandler {
+func NewAuthHandler(s AuthService) *AuthHandler {
 	return &AuthHandler{
 		service: s,
 	}
@@ -46,13 +44,8 @@ func (h *AuthHandler) SignUp(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	if !ValidatePassword(req.Password) || !ValidateEmail(strings.ToLower(req.Email)) {
-		SendEmptyResponse(w, http.StatusBadRequest)
-		return
-	}
-
-	err = h.service.SignUp(r.Context(), req.Email, req.Password)
-	if errors.Is(err, models.ErrAlreadyExist) {
+	err = h.service.SignUp(r.Context(), req)
+	if errors.Is(err, models.ErrAlreadyExist) || errors.Is(err, models.ErrInvalidData) {
 		SendEmptyResponse(w, http.StatusBadRequest)
 		return
 	}
@@ -95,12 +88,7 @@ func (h *AuthHandler) Login(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	if !ValidatePassword(req.Password) || !ValidateEmail(strings.ToLower(req.Email)) {
-		SendEmptyResponse(w, http.StatusBadRequest)
-		return
-	}
-
-	res, err := h.service.Login(r.Context(), req.Email, req.Password)
+	res, err := h.service.Login(r.Context(), req)
 	if err != nil {
 		SendHTTPError(w, err)
 		return

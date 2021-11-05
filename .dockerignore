@@ -1,0 +1,8 @@
+docker
+infrastructure
+**/.git
+Dockerfile
+docker-*
+.git*
+.docker*
+vendor

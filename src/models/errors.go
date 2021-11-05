@@ -3,6 +3,7 @@ package models
 import "errors"
 
 var (
+	ErrInvalidData  = errors.New("invalid data")
 	ErrUnauthorized = errors.New("unauthorized")
 	ErrForbidden    = errors.New("forbidden")
 	ErrNotFound     = errors.New("not found")

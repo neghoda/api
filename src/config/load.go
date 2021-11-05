@@ -15,7 +15,7 @@ const (
 	mapStructureTagName   = "mapstructure"
 )
 
-func Read() (Config, error) {
+func Read() (*Config, error) {
 	v := viper.New()
 	v.SetEnvKeyReplacer(strings.NewReplacer(viperDefaultDelimiter, "_")) // replace default viper delimiter for env vars
 	v.AutomaticEnv()
@@ -25,15 +25,15 @@ func Read() (Config, error) {
 
 	err := setDefaults("", v, &reflect.StructField{}, reflect.ValueOf(&cfg).Elem())
 	if err != nil {
-		return cfg, errors.WithMessage(err, "failed to apply defaults")
+		return &cfg, errors.WithMessage(err, "failed to apply defaults")
 	}
 
 	err = v.Unmarshal(&cfg)
 	if err != nil {
-		return cfg, errors.WithMessage(err, "failed to parse configuration")
+		return &cfg, errors.WithMessage(err, "failed to parse configuration")
 	}
 
-	return cfg, nil
+	return &cfg, nil
 }
 
 // setDefaults sets default values for struct fields based using value from default tag.

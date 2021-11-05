@@ -11,7 +11,6 @@ import (
 
 	"github.com/neghoda/api/src/cron"
 	"github.com/neghoda/api/src/repo/ssga"
-	"github.com/neghoda/api/src/server/handlers"
 	"github.com/neghoda/api/src/service"
 
 	log "github.com/sirupsen/logrus"
@@ -39,8 +38,7 @@ func main() {
 	ctx, cancel := context.WithCancel(context.Background())
 	setupGracefulShutdown(cancel)
 
-	persistenceDB := postgres.New()
-	err = persistenceDB.NewConn(&cfg.PostgresCfg)
+	persistenceDB, err := postgres.NewConn(&cfg.PostgresCfg)
 	if err != nil {
 		log.Fatal(fmt.Sprintf("cannot connect to the Postgres server %v", err))
 	}
@@ -53,14 +51,16 @@ func main() {
 	)
 
 	srv := service.New(
-		&cfg,
-		persistenceDB,
+		cfg,
+		persistenceDB.NewAuthRepo(),
+		persistenceDB.NewFundRepo(),
+		persistenceDB.NewUserRepo(),
 		ssgaClient,
 	)
 
 	crowWrapper := cron.NewCronWrapper(
-		&cfg,
-		persistenceDB,
+		cfg,
+		persistenceDB.NewFundRepo(),
 		ssgaClient,
 	)
 
@@ -71,8 +71,7 @@ func main() {
 
 	httpSrv, err := http.New(
 		&cfg.HTTPConfig,
-		handlers.NewAuthHandler(srv),
-		handlers.NewFundHandler(srv),
+		srv,
 	)
 
 	if err != nil {

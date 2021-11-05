@@ -8,12 +8,11 @@ type Config struct {
 	LogLevel          string   `mapstructure:"LOG_LEVEL" default:"DEBUG"`
 	HTTPConfig        HTTP     `mapstructure:"HTTP_SERVER"`
 	PostgresCfg       Postgres `mapstructure:"POSTGRES_MASTER"`
-	PostgresTestCfg   Postgres `mapstructure:"POSTGRES_TEST"`
 	RefreshTokenLen   int      `mapstructure:"REFRESH_TOKEN_LEN" default:"32"`
 	AccessTokenTTL    int      `mapstructure:"ACCESS_TOKEN_TTL_SEC" default:"900"` // seconds
 	AccessTokenSecret string   `mapstructure:"ACCESS_TOKEN_SECRET" default:""`
 	UserSessionTTL    int      `mapstructure:"USER_SESSION_TTL_SEC" default:"86400"` // seconds
-	CronConfig        string   `mapstructure:"CRON_CONFIG" default:"05 18 * * *"`
+	CronConfig        string   `mapstructure:"CRON_CONFIG" default:"46 16 * * *"`
 }
 
 type HTTP struct {
@@ -28,7 +27,7 @@ type HTTP struct {
 type Postgres struct {
 	Host         string        `mapstructure:"HOST"          default:"localhost"`
 	Port         string        `mapstructure:"PORT"          default:"5432"`
-	Name         string        `mapstructure:"NAME"          default:"erp-db"`
+	Name         string        `mapstructure:"NAME"          default:"api-db"`
 	User         string        `mapstructure:"USER"          default:"postgres"`
 	Password     string        `mapstructure:"PASSWORD"      default:"12345"`
 	PoolSize     int           `mapstructure:"POOL_SIZE"     default:"10"`

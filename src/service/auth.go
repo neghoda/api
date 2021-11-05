@@ -4,8 +4,10 @@ import (
 	"context"
 	"crypto/rand"
 	"encoding/base64"
+	"regexp"
 	"strings"
 	"time"
+	"unicode"
 
 	"github.com/golang-jwt/jwt"
 	"github.com/google/uuid"
@@ -15,8 +17,12 @@ import (
 
 const hoursInDay = 24
 
-func (s Service) SignUp(ctx context.Context, email, password string) error {
-	emailTaken, err := s.db.QueryContext(ctx).EmailTaken(email)
+func (s Service) SignUp(ctx context.Context, signUpReq *models.SignUpRequest) error {
+	if !validatePassword(signUpReq.Password) || !validateEmail(strings.ToLower(signUpReq.Email)) {
+		return models.ErrInvalidData
+	}
+
+	emailTaken, err := s.userRepo.EmailTaken(ctx, signUpReq.Email)
 	if err != nil {
 		return err
 	}
@@ -25,30 +31,34 @@ func (s Service) SignUp(ctx context.Context, email, password string) error {
 		return models.ErrAlreadyExist
 	}
 
-	hashPassword, err := newHash(password)
+	hashPassword, err := newHash(signUpReq.Password)
 	if err != nil {
 		return err
 	}
 
 	user := &models.User{
-		Email:     strings.ToLower(email),
+		Email:     strings.ToLower(signUpReq.Email),
 		Password:  hashPassword,
 		CreatedAt: time.Now(),
 		UpdatedAt: time.Now(),
 	}
 
-	return s.db.QueryContext(ctx).CreateUser(user)
+	return s.userRepo.CreateUser(ctx, user)
 }
 
-func (s Service) Login(ctx context.Context, email, password string) (models.TokenPair, error) {
+func (s Service) Login(ctx context.Context, loginReq *models.LoginRequest) (models.TokenPair, error) {
 	var tokenPair models.TokenPair
 
-	user, err := s.db.QueryContext(ctx).GetUserByEmail(email)
+	if !validatePassword(loginReq.Password) || !validateEmail(strings.ToLower(loginReq.Email)) {
+		return tokenPair, models.ErrUnauthorized
+	}
+
+	user, err := s.userRepo.GetUserByEmail(ctx, loginReq.Email)
 	if err != nil {
 		return tokenPair, err
 	}
 
-	if !compareHashAndPassword(password, user.Password) {
+	if !compareHashAndPassword(loginReq.Password, user.Password) {
 		return tokenPair, models.ErrUnauthorized
 	}
 
@@ -86,7 +96,7 @@ func (s Service) Logout(ctx context.Context, accessToken string) (err error) {
 		return err
 	}
 
-	err = s.db.QueryContext(ctx).DisableSessionByID(claims.SessionID)
+	err = s.authRepo.DisableSessionByID(ctx, claims.SessionID)
 	if err != nil {
 		return err
 	}
@@ -95,29 +105,29 @@ func (s Service) Logout(ctx context.Context, accessToken string) (err error) {
 }
 
 // RefreshToken refreshes access token.
-func (s Service) RefreshToken(ctx context.Context, oldTokens *models.TokenPair) (*models.TokenPair, error) {
-	access, err := s.parseJWT(oldTokens.AccessToken)
+func (s Service) RefreshToken(ctx context.Context, tokenReq *models.TokenPair) (models.TokenPair, error) {
+	access, err := s.parseJWT(tokenReq.AccessToken)
 	if err != nil {
-		return nil, models.ErrTokenInvalid
+		return models.TokenPair{}, models.ErrTokenInvalid
 	}
 
 	accessClaims := s.parseClaims(access)
 	if accessClaims == nil {
-		return nil, models.ErrTokenClaimsInvalid
+		return models.TokenPair{}, models.ErrTokenClaimsInvalid
 	}
 
-	session, err := s.db.QueryContext(ctx).GetSessionByTokenID(accessClaims.TokenID)
+	session, err := s.authRepo.GetSessionByTokenID(ctx, accessClaims.TokenID)
 	if err != nil {
-		return nil, models.ErrSessionNotFound
+		return models.TokenPair{}, models.ErrSessionNotFound
 	}
 
-	if session.RefreshToken != oldTokens.RefreshToken {
-		return nil, models.ErrTokensMismatched
+	if session.RefreshToken != tokenReq.RefreshToken {
+		return models.TokenPair{}, models.ErrTokensMismatched
 	}
 
 	now := time.Now().UTC()
 	if now.After(*session.ExpiredAt) {
-		return nil, models.ErrSessionExpired
+		return models.TokenPair{}, models.ErrSessionExpired
 	}
 
 	claims := models.Claims{
@@ -128,22 +138,25 @@ func (s Service) RefreshToken(ctx context.Context, oldTokens *models.TokenPair) 
 
 	accessNew, err := s.GenerateAccess(&claims)
 	if err != nil {
-		return nil, err
+		return models.TokenPair{}, err
 	}
 
 	session.TokenID = claims.TokenID
 	session.UpdatedAt = &now
 
-	err = s.db.QueryContext(ctx).UpdateSession(session)
+	err = s.authRepo.UpdateSession(ctx, session)
 	if err != nil {
-		return nil, err
+		return models.TokenPair{}, err
 	}
 
-	if _, err = s.Revoke(oldTokens.AccessToken); err != nil {
-		return nil, err
+	if _, err = s.Revoke(tokenReq.AccessToken); err != nil {
+		return models.TokenPair{}, err
 	}
 
-	return &models.TokenPair{AccessToken: accessNew, RefreshToken: oldTokens.RefreshToken}, nil
+	return models.TokenPair{
+		AccessToken:  accessNew,
+		RefreshToken: tokenReq.RefreshToken,
+	}, nil
 }
 
 // GenerateAccess generates token with claims.
@@ -190,7 +203,7 @@ func (s Service) createSession(ctx context.Context, claims *models.Claims, token
 		ExpiredAt:    &expiredAt,
 	}
 
-	return s.db.QueryContext(ctx).CreateSession(ctx, &session)
+	return s.authRepo.CreateSession(ctx, &session)
 }
 
 // Revoke revokes access token.
@@ -236,5 +249,38 @@ func compareHashAndPassword(password, hash string) bool {
 	if err := bcrypt.CompareHashAndPassword([]byte(hash), []byte(password)); err != nil {
 		return false
 	}
+	return true
+}
+
+func validatePassword(password string) bool {
+	var (
+		hasUpper  = false
+		hasLower  = false
+		hasNumber = false
+	)
+
+	if !(len(password) >= 8) || !(len(password) <= 50) {
+		return false
+	}
+
+	for _, char := range password {
+		switch {
+		case unicode.IsUpper(char):
+			hasUpper = true
+		case unicode.IsLower(char):
+			hasLower = true
+		case unicode.IsNumber(char):
+			hasNumber = true
+		}
+	}
+
+	return hasUpper && hasLower && hasNumber
+}
+
+func validateEmail(email string) bool {
+	if m, _ := regexp.MatchString(`^([\w\.\_]{2,10})@(\w{1,}).([a-z]{2,4})$`, email); !m {
+		return false
+	}
+
 	return true
 }
