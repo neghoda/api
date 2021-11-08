@@ -12,7 +12,7 @@ const (
 	finishedMsg = "job finished in %v"
 )
 
-func (cw *CronWrapper) syncFundsData() {
+func (cw *Wrapper) syncFundsData() {
 	start := time.Now()
 
 	mapFundTickerURL, err := cw.ssgaRepo.FetchFundFinderPage()
@@ -27,7 +27,7 @@ func (cw *CronWrapper) syncFundsData() {
 	log.Printf(finishedMsg, time.Since(start))
 }
 
-func (cw *CronWrapper) syncFundData(ctx context.Context, url string) {
+func (cw *Wrapper) syncFundData(ctx context.Context, url string) {
 	fund, err := cw.ssgaRepo.FetchFundPage(url)
 	if err != nil {
 		log.Errorf(errMsg, err)

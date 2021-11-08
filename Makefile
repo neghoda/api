@@ -31,9 +31,6 @@ dep: # Download required dependencies
 lint: dep check-lint ## Lint the files local env
 	$(GOLINT) run -c .golangci.yml --timeout 5m
 
-test: dep test-db-prepare ## Run unit tests
-	go test -race -tags musl,unit -count=1 -short ./...
-
 build: dep ## Build the binary file
 	CGO_ENABLED=1 go build -mod=vendor -o ./bin/${BIN_NAME} -a ./src
 

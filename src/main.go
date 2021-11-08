@@ -58,7 +58,7 @@ func main() {
 		ssgaClient,
 	)
 
-	crowWrapper := cron.NewCronWrapper(
+	crowWrapper := cron.NewWrapper(
 		cfg,
 		persistenceDB.NewFundRepo(),
 		ssgaClient,

@@ -22,6 +22,8 @@ linters-settings:
     disabled-checks:
       - wrapperFunc
       - dupImport # https://github.com/go-critic/go-critic/issues/845
+      - whyNoLint
+      - singleCaseSwitch
 
 linters:
   disable-all: true
@@ -33,7 +35,6 @@ linters:
     - funlen
     - gochecknoinits
     - gocognit
-    - goconst
     - gocritic
     - gocyclo
     - gofmt

@@ -12,25 +12,25 @@ import (
 
 var once = &sync.Once{}
 
-type CronWrapper struct {
+type Wrapper struct {
 	cfg      *config.Config
 	fundRepo service.FundRepo
 	ssgaRepo *ssga.Client
 }
 
-func NewCronWrapper(
+func NewWrapper(
 	cfg *config.Config,
 	fundRepo service.FundRepo,
 	ssgaRepo *ssga.Client,
-) *CronWrapper {
-	return &CronWrapper{
+) *Wrapper {
+	return &Wrapper{
 		cfg:      cfg,
 		fundRepo: fundRepo,
 		ssgaRepo: ssgaRepo,
 	}
 }
 
-func (cw *CronWrapper) Setup() error {
+func (cw *Wrapper) Setup() error {
 	var err error
 
 	once.Do(func() {
