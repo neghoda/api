@@ -17,7 +17,7 @@ require (
 	github.com/sirupsen/logrus v1.7.0
 	github.com/spf13/pflag v1.0.5 // indirect
 	github.com/spf13/viper v1.7.1
-	github.com/swaggo/http-swagger v1.0.0
+	github.com/swaggo/http-swagger v1.2.6
 	golang.org/x/crypto v0.0.0-20210513164829-c07d793c2f9a
 	golang.org/x/net v0.0.0-20210503060351-7fd8e65b6420
 	golang.org/x/sys v0.0.0-20210806184541-e5e7981a1069 // indirect
